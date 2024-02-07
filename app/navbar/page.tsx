@@ -5,7 +5,7 @@ export default function Nav(){
 
     return (
         <div className="link-container">
-            <Image className="elanco-logo" src="/images/images.png" alt="Logo" width={150} height={50}/>
+            <Image className="elanco-logo" src="/images/cropfblogo.jpg" alt="Logo" width={150} height={50}/>
             <Link className="redirect" href='../'><p>Home</p></Link>
             <Link className="redirect" href='/login'><p>Login</p></Link>
             <Link className="redirect" href='/register'><p>Sign Up</p></Link>

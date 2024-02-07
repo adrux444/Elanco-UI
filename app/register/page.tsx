@@ -1,15 +1,19 @@
-import "./register.css";
+import NavBar from "../navbar/page";
+
 export default function Register() {
   return (
-    // <main className={styles.main}>
-    //   <div className={styles.description}>
-        <p>
-          Register Page ELANCO
-        </p>
-        // <div>
-        // </div>
-    //   </div>
+    <main>
 
-    // </main>
+      <div>
+        <NavBar/>
+      </div>
+
+          <div className="container">
+            <p>Sign Up Page ELANCO</p>
+
+          </div>
+
+
+    </main>
   );
 }

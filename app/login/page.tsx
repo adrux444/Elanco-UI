@@ -1,15 +1,17 @@
-import "./login.css";
-export default function Login() {
-  return (
-    // <main className={styles.main}>
-    //   <div className={styles.description}>
-        <p>
-          Login Page ELANCO
-        </p>
-        // <div>
-        // </div>
-    //   </div>
+import NavBar from "../navbar/page";
 
-    // </main>
+export default function Login() {
+
+  return (
+    <main>
+        <div>
+          <NavBar/>
+        </div>
+          <div>
+          <p>
+            Login Page ELANCO
+          </p>
+        </div>
+    </main>
   );
 }
