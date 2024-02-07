@@ -13,6 +13,35 @@ pnpm dev
 # or
 bun dev
 ```
+### Git Commands:
+
+`git init`
+
+<br />
+
+`git add .`
+
+<br />
+
+`git commit -m "enter your commit message"`
+
+<br />
+
+`git push` (push data)
+
+<br />
+
+`git pull` (pull data)
+
+<br />
+
+`git branch` (check number of branches)
+
+
+
+<hr />
+
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
