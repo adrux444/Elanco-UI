@@ -1,20 +1,19 @@
 .elanco-logo {
     float:left;
-    width:18%;
+    width:10%;
     height: 100%;
     text-align: center;
     color: white;
-    line-height:40px;
 }
 
 .link-container{
     width: 100%;
-    height: 7%;
+    height: 6%;
     top: 0;
     left: 0;
     position: absolute;
     right: 30%;
-    background-color: #082c3c;
+    background-color: #2171b8;
 }
 
 .redirect {
@@ -23,6 +22,6 @@
     height: 100%;
     text-align: center;
     color: white;
-    line-height:40px;
+    line-height:25px;
     text-decoration: none;
 }

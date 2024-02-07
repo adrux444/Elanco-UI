@@ -1,6 +1,3 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-import Logo from "next/image";
 import NavBar from "./navbar/page";
 
 export default function Home() {
@@ -8,12 +5,11 @@ export default function Home() {
     <main>
         <div>
           <NavBar/>
-        </div>
-
-        <div>
+          <div>
           <p>
             Home Page ELANCO
           </p>
+        </div>
         </div>
     </main>
   );
