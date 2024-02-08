@@ -1,3 +1,7 @@
+import Input from '@mui/joy/Input';
+import Button from '@mui/joy/Button';
+import "./register.css";
+
 import NavBar from "../navbar/page";
 
 export default function Register() {
@@ -7,13 +11,55 @@ export default function Register() {
       <div>
         <NavBar/>
       </div>
-
-          <div className="container">
-            <p>Sign Up Page ELANCO</p>
-
+          <form>
+          <div className="signup-container">
+            <h1>Welcome back!</h1>
+            <br/>
+            <h3>To keep connected with us please login with your personal info</h3>
+            <h3>We appreciate your trust from Elanco</h3>
+            <br></br>
+            <div>
+              <Button style={{width:"15%"}}>Login</Button>
+            </div>
           </div>
-
-
+        </form>
+        <form>
+        <div className="signup-form">
+          <div className="signup-container2">
+            <h1>Create account</h1>
+            <h2>______________________________________</h2>
+            <br></br>
+            <div className="input-container">
+              <Input style={{width: "50%"}} placeholder="First name"/>
+            </div>
+            <br />
+            <br />
+            <div className="input-container">
+              <Input style={{width: "50%"}} placeholder="Last name"/>
+            </div>
+            <br />
+            <br />
+            <div className="input-container">
+              <Input style={{width: "50%"}} type="password" placeholder="Password"/>
+            </div>
+            <br />
+            <br />
+            <div className="input-container">
+              <Input style={{width: "50%"}} type="password" placeholder="Password confirm"/>
+            </div>
+            <br />
+            <br />
+            <div className="input-container">
+              <Input style={{width: "50%"}} placeholder="Your phone number (optional)"/>
+            </div>
+            <br />
+            <br />
+            <div>
+              <Button style={{width: "15%"}}>Sign up</Button>
+            </div>
+          </div>
+        </div>
+      </form>
     </main>
   );
 }

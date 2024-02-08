@@ -1,17 +1,24 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-import Logo from "next/image";
 import NavBar from "../navbar/page";
+import "./main.css";
 export default function Main() {
   return (
     <main>
         <div>
           <NavBar/>
-          <div>
-          <p>
-            Main Page ELANCO
-          </p>
-        </div>
+          <div className="title">
+            <h1>Welcome Your pet's health at a glance</h1>
+          </div>
+          <div className="cards">
+            <div className="card">Activity Level <a className="viewmore">View more</a></div>
+            <div className="card">Calories <a className="viewmore">View more</a></div>
+            <div className="card">Sleep <a className="viewmore">View more</a></div>
+            <div className="card">Water Intake <a className="viewmore">View more</a></div>
+            <div className="card">Heart Rate <a className="viewmore">View more</a></div>
+            <div className="card">Breathing Rate <a className="viewmore">View more</a></div>
+            <div className="card">Temperature <a className="viewmore">View more</a></div>
+            <div className="card">Weight <a className="viewmore">View more</a></div>
+            <div className="card">Extra card <a className="viewmore">View more</a></div>
+          </div>
         </div>
     </main>
   );
