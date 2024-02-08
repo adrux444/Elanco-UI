@@ -13,6 +13,13 @@ pnpm dev
 # or
 bun dev
 ```
+
+### Material Installation
+
+```
+npm install @mui/material @emotion/react @emotion/styled
+```
+
 ### Git Commands:
 
 `git init`
