@@ -1,4 +1,5 @@
 import NavBar from "./navbar/page";
+import "./page.css"
 
 export default function Home() {
   return (
@@ -7,7 +8,7 @@ export default function Home() {
           <NavBar/>
           <div>
           <p>
-            Home Page ELANCO
+            
           </p>
         </div>
         </div>
