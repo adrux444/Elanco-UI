@@ -1,4 +1,5 @@
 import NavBar from "../navbar/page";
+import Footer from "../footer/page";
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 import "./register.css";
@@ -38,6 +39,11 @@ export default function Register() {
             <br/>
             <br/>
             <div className="input-container">
+              <Input style={{width: "50%"}} placeholder="Email Address"/>
+            </div>
+            <br/>
+            <br/>
+            <div className="input-container">
               <Input style={{width: "50%"}} type="password" placeholder="Password"/>
             </div>
             <br/>
@@ -58,6 +64,9 @@ export default function Register() {
           </div>
         </div>
       </form>
+      <div>
+        <Footer/>
+      </div>
     </main>
   );
 }

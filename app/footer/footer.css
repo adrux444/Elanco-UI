@@ -1,0 +1,31 @@
+.footer-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #2171b8;
+    width: 100%;
+}
+
+.content-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+p {
+    text-align: center;
+    font-size: 20px;
+    color: #fff;
+}
+
+.image-container {
+    position: absolute;
+    right: 0;
+}
+
+.elanco-logo2{
+    width: 100%;
+}
+

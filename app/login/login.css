@@ -1,3 +1,8 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .input-container{
     display: flex;
     justify-content: center;
@@ -21,6 +26,7 @@
     background-color: #02253E;
     color: white;
     float: right;
+    margin-bottom: 20px;
 }
 
 .login-container2 > h1{

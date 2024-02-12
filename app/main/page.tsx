@@ -1,5 +1,6 @@
 import NavBar from "../navbar/page";
 import "./main.css";
+import Footer from "../footer/page";
 export default function Main() {
   return (
     <main>
@@ -19,7 +20,9 @@ export default function Main() {
             <div className="card">Weight <a className="viewmore">View more</a></div>
             <div className="card">Extra card <a className="viewmore">View more</a></div>
           </div>
+          <br />
         </div>
+        <Footer/>
     </main>
   );
 }

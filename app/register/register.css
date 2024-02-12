@@ -1,3 +1,8 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .input-container{
     display: flex;
     justify-content: center;
@@ -9,7 +14,7 @@
     text-align: center;
     width:50%;
     height: 100vh;
-    padding-top: 240px;
+    padding-top: 100px;
 }
 
 .signup-container{
@@ -20,6 +25,7 @@
 
 .signup-container2{
     float: right;
+    margin-bottom: 20px;
 }
 
 .signup-container > h1{
