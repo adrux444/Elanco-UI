@@ -1,5 +1,4 @@
 .container {
-    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -18,6 +17,10 @@
     background-color: #2171b8;
     overflow: hidden; /* Ensure links don't overflow */
 }
+
+.redirect:hover {
+    color: rgb(0, 0, 145);
+  }
 
 .redirect {
     float: left;

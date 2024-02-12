@@ -1,9 +1,11 @@
 .title{
     padding-top: 40px;
+    padding-left: 50px;
 }
 
 body{
-    padding: 1rem;
+    margin: 0;
+    padding: 0;
     font-size: 22px;
 }
 
@@ -23,6 +25,7 @@ body{
     margin: 0 auto;
     display: grid;
     gap: 3rem;
+    padding-left: 10px;
     grid-template-columns: repeat(1, 1fr);
 }
 
