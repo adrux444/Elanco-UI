@@ -1,28 +1,29 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
-.whole-page{
-    font-display: optional;
-    font-family: "Open-Sans", sans-serif;
-}
 .info-container{
+    font-display: optional;
     padding-top: 5%;
     text-align: left;
     padding-left: 2%;
     color: white;
     width: 98%;
     height: 10%;
+    font-family: "Open-Sans", sans-serif;
     border-radius: 25px;
     margin: auto;
     background-color: #1e609d;
 }
 
 h1 {
+    font-display: optional;
     font-weight: 880;
     font-size: 45px;
+    font-family: "Open-Sans", sans-serif;
     text-align: left;
     padding-left: 2%;
 }
 
 .info-light-left{
+    font-display: optional;
     padding: 1%;
     float: left;
     text-align: left;
@@ -30,6 +31,7 @@ h1 {
     color: black;
     width: 40%;
     height: 10%;
+    font-family: "Open-Sans", sans-serif;
     border-radius: 25px;
     margin: auto;
     margin-left: 5%;
@@ -40,6 +42,7 @@ h1 {
 }
 
 .info-blue-left{
+    font-display: optional;
     padding: 1%;
     float: right;
     text-align: left;
@@ -47,6 +50,7 @@ h1 {
     color: white;
     max-width: 68%;
     height: 10%;
+    font-family: "Open-Sans", sans-serif;
     border-radius: 25px;
     margin: auto;
     margin-top: 2%;
@@ -56,18 +60,22 @@ h1 {
 }
 
 h2{
+    font-display: optional;
     font-weight: 600;
     font-size: 26px;
+    font-family: "Open-Sans", sans-serif;
     text-align: left;
 }
 
 .image-container{
+    font-display: optional;
     padding: 1%;
     padding-right: 1%;
     float: right;
     text-align: center;
     color: black;
     height: 10%;
+    font-family: "Open-Sans", sans-serif;
     border-radius: 25px;
     margin: auto;
     margin-right: 5%;
@@ -78,12 +86,14 @@ h2{
 }
 
 .image-container2{
+    font-display: optional;
     padding: 1%;
     padding-right: 1%;
     float: left;
     text-align: center;
     color: black;
     height: 10%;
+    font-family: "Open-Sans", sans-serif;
     border-radius: 25px;
     margin-left: 5%;
     margin-top: 1%;
@@ -93,5 +103,6 @@ h2{
 }
 
 img {
+    font-display: optional;
     border-radius: 20px;
 }
