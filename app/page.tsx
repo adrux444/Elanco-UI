@@ -3,6 +3,7 @@ import Button from '@mui/joy/Button';
 import Stack from "@mui/joy/stack";
 import Image from "next/image"
 import Link from 'next/link'
+import Footer from "./footer/page";
 import "./home.css";
 
 export default function Home() {
@@ -41,6 +42,9 @@ export default function Home() {
               </Stack>
           </div>
           
+        </div>
+        <div>
+          <Footer/>
         </div>
     </main>
   );

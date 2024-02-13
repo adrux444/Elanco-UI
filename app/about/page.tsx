@@ -1,6 +1,5 @@
 import Image from "next/image";
-import styles from "./page.module.css";
-import Logo from "next/image";
+import Footer from "../footer/page";
 import NavBar from "../navbar/page";
 import './about.css';
 
@@ -21,11 +20,11 @@ export default function Login() {
         </div>
         
         <div className="image-container">
-          <Image className="image" layout="responsive" src="/images/dog4.jpg" alt="dog4" width={441.6} height={294.6}/>
+          <Image className="image" src="/images/dog4.jpg" alt="dog4" width={441.6} height={294.6}/>
         </div>
 
         <div className="image-container2">
-          <Image layout="responsive" className="image" src="/images/dog5.jpg" alt="dog5" width={208} height={312}/>
+          <Image className="image" src="/images/dog5.jpg" alt="dog5" width={208} height={312}/>
         </div>
 
         <div className="info-blue-left">

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 .info-container{
+    font-display: optional;
     padding-top: 5%;
     text-align: center;
     color: black;
@@ -14,6 +15,7 @@
 }
 
 h1 {
+    font-display: optional;
     font-weight: 990;
     font-size: 250%;
     font-family: "Open-Sans", sans-serif;
@@ -22,6 +24,7 @@ h1 {
 }
 
 .images-container{
+    font-display: optional;
     padding-top: 1%;
     padding-bottom: 1%;
     text-align: center;
@@ -37,6 +40,7 @@ h1 {
 }
 
 .image{
+    font-display: optional;
     width: auto;
     height: auto;
     padding: 0;
@@ -44,6 +48,7 @@ h1 {
 }
 
 .login-container{
+    font-display: optional;
     width: 50%;
     height: auto;
     padding-top: 0.5%;
