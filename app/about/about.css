@@ -1,11 +1,63 @@
-body {
+body{
     margin: 0;
     padding: 0;
 }
+.info-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-.info-container {
-    max-width: 1200px;
+.info-container h1{
+    font-size: 250%;
+    text-align: left;
+}
+
+.info-container h4 {
+    font-size: 120%;
+}
+
+.info-container2 {
+    text-align: center;
+    font-size: 150%;
+}
+
+.info-container2 h4 {
+    font-size: 75%;
+    padding: 0 10px;
+}
+
+.info-container, .info-container2 {
     margin: 0 auto;
     text-align: center;
-    background-color: rgb(239, 239, 239);
+    border-radius: 50px;
+    color: white;
+    background-color: #1E609D;
+    max-width: 1200px;
+    padding: 20px;
+}
+
+.images {
+    max-width: 2000px;
+    margin: 20px 10px 0 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.image-container-dogs, .image-container-dogs2 {
+    width: 38%;
+}
+
+.image-container-dogs img, .image-container-dogs2 img {
+    width: 70%;
+    border-radius: 10px;
+}
+
+.image-container-dogs img {
+    width: 160%;
+}
+
+.image-container-dogs2 img {
+    height: 90%;
+    width: 100%;
 }

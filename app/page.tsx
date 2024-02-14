@@ -29,14 +29,15 @@ export default function Home() {
           <Image src="/images/dog3.webp" alt="dog3" width={294.4} height={196.4}/>
           </div>
         </div>
+        <br />
         <div className="login-container">
-            <h3>Login or Sign Up now to find out more!</h3>
-            <Link href="/login" passHref>
-              <Button target="_blank">Login</Button>
-            </Link>
-            <Link href="/register" passHref>
-              <Button target="_blank">Sign Up</Button>
-            </Link>
+          <h3>Login or Sign Up now to find out more!</h3>
+          <Link href="/login" passHref>
+            <Button className="button" target="_blank">Login</Button>
+          </Link>
+          <Link href="/register" passHref>
+            <Button className="button" target="_blank">Sign Up</Button>
+          </Link>
         </div>
         <br/>
         <div>
