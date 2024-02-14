@@ -8,13 +8,12 @@ body {
     justify-content: center;
     flex-direction: column;
     align-items: center;
-
 }
 
 .login-container, .login-container2 {
     text-align: center;
     width:50%;
-    height: 100vh;
+    height: 60vh;
     padding-top: 200px;
 }
 
