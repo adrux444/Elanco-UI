@@ -1,25 +1,56 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 body {
     margin: 0;
     padding: 0;
+    font-family: "Open-Sans", sans-serif;
 }
 
+
+h1{
+    font-size: 250%;
+}
 .info-container, .login-container {
-  margin: 0 auto;
-  text-align: center;
-  background-color: rgb(239, 239, 239);
+    margin: 0 auto;
+    text-align: center;
+    background-color: #011D31
 }
 
 .info-container {
     max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-    background-color: rgb(239, 239, 239);
+    margin-top: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-size: 150%;
+    text-align: left;
+    background-color: #F6F6F6;
+}
+
+h4 {
+    font-size: 90%;
+}
+
+.login-container {
+    max-width: 600px;
+    padding: 10px;
+    font-size: 150%;
+    color: white;
+    border-radius: 50px;
+    background-color: #011D31
+}
+
+.button {
+    margin: 10px;
+    font-size: 100%;
+    width: 40%;
 }
 
 .image-line {
-    display: flex;
+    margin: 0 auto;
     justify-content: center;
     align-items: center;
+    max-width: 1200px;
+    background-color: #F6F6F6;
   }
 
 .image-aligner{
@@ -27,8 +58,13 @@ body {
     margin: 0 50px;
 }
 
-.login-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
+.image-aligner img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media screen and (max-width: 800px){
+    .image-line{
+        display: grid;
+    }
 }
