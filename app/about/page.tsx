@@ -1,9 +1,9 @@
+import './about.css';
 import Image from "next/image";
 import Footer from "../footer/page";
 import styles from "./page.module.css";
 import Logo from "next/image";
 import NavBar from "../navbar/page";
-import './about.css';
 
 export default function About() {
   return (

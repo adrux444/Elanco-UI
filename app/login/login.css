@@ -13,7 +13,7 @@ body {
 .login-container, .login-container2 {
     text-align: center;
     width:50%;
-    height: 60vh;
+    min-height: 650px;
     padding-top: 200px;
 }
 
@@ -25,7 +25,6 @@ body {
     background-color: #02253E;
     color: white;
     float: right;
-    margin-bottom: 20px;
 }
 
 .login-container2 > h1{

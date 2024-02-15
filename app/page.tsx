@@ -1,10 +1,9 @@
+import "./home.css";
 import NavBar from "./navbar/page";
-import Footer from "./footer/page";
-import Button from '@mui/joy/Button';
-import Stack from "@mui/joy/stack";
 import Image from "next/image"
 import Link from 'next/link'
-import "./home.css";
+import Button from '@mui/joy/Button';
+import Footer from "./footer/page";
 
 export default function Home() {
   return (
@@ -32,11 +31,11 @@ export default function Home() {
         <br />
         <div className="login-container">
           <h3>Login or Sign Up now to find out more!</h3>
-          <Link href="/login" passHref>
-            <Button className="button" target="_blank">Login</Button>
+          <Link href="/login">
+            <Button className="button">Login</Button>
           </Link>
-          <Link href="/register" passHref>
-            <Button className="button" target="_blank">Sign Up</Button>
+          <Link href="/register">
+            <Button className="button">Sign Up</Button>
           </Link>
         </div>
         <br/>

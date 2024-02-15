@@ -1,6 +1,6 @@
+import "./footer.css"
 import Link from "next/link"
 import Image from "next/image"
-import "./footer.css"
 
 export default function Footer(){
     return (
