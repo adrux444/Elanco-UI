@@ -13,19 +13,19 @@ body {
 .signup-container, .signup-container2{
     text-align: center;
     width:50%;
-    height: 100vh;
-    padding-top: 100px;
+    min-height: 800px;
+    padding-top: 50px;
 }
 
 .signup-container{
     float: left;
     color: white;
+    padding-top: 120px;
     background-color: #02253E;
 }
 
 .signup-container2{
     float: right;
-    margin-bottom: 20px;
 }
 
 .signup-container > h1{

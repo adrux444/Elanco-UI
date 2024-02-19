@@ -1,8 +1,8 @@
-import NavBar from "../navbar/page";
-import Footer from "../footer/page";
+import "./register.css";
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
-import "./register.css";
+import NavBar from "../navbar/page";
+import Footer from "../footer/page";
 
 export default function Register() {
   return (

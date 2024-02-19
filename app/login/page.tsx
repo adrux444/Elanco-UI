@@ -1,8 +1,8 @@
+import "./login.css";
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
-import "./login.css";
 
 export default function Login() {
 

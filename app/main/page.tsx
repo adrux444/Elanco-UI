@@ -1,5 +1,5 @@
-import NavBar from "../navbar/page";
 import "./main.css";
+import NavBar from "../navbar/page";
 import Footer from "../footer/page";
 import Link from "next/link";
 export default function Main() {
