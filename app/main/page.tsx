@@ -1,4 +1,5 @@
 "use client";
+import React, { useState, useEffect } from "react";
 import "./main.css";
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
@@ -8,19 +9,27 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import React from "react";
 export default function Main() {
   
-  const [dog] = React.useState('');
+  const [dog, setDog] = useState<string>('');
+  
   const handleChange = (event: SelectChangeEvent) => {
-    var url = require('url');
-    const adr = new URL('http://localhost:3000/main');
-    adr.searchParams.append('dog', event.target.value);
-    history.pushState({
-      id: 'about-me',
-      source: 'web'
-      }, 'home', adr)
+    setDog(event.target.value);
   };
+
+  useEffect(() => {
+    if (dog !== '') {
+      var url = require('url');
+      const adr = new URL('http://localhost:3000/main');
+      adr.searchParams.append('dog', dog);
+      window.location.href = adr.toString();
+    }
+  }, [dog]);
+
+
+  const dogLabel = dog || "Select Dog";
+  
+  
   return (
     <main>
         <div>
@@ -30,22 +39,23 @@ export default function Main() {
             <div>
               <Box sx={{ maxWidth: '20%' }}>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Choose Dog</InputLabel>
-                <Select
-                  labelId="dog-choice"
-                  label="Choose Dog"
-                  value={dog}
-                  id='Dog'
-                  onChange= {handleChange} >
-                <MenuItem value={'canine1'}>Canine 1</MenuItem>
-                <MenuItem value={'canine2'}>Canine 2</MenuItem>
-                <MenuItem value={'canine3'}>Canine 3</MenuItem>
-                </Select>
-              </FormControl>
+                  <InputLabel id="demo-simple-select-label">{dogLabel}</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={dogLabel}
+                    label="Dog"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={'canine1'}>Canine 1</MenuItem>
+                    <MenuItem value={'canine2'}>Canine 2</MenuItem>
+                    <MenuItem value={'canine3'}>Canine 3</MenuItem>
+                  </Select>
+                </FormControl>
               </Box>
-              </div>
+            </div>
               
-              <h1><div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
+            <h1><div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
           </div>
           <div className="cards">
             <div className="card">
