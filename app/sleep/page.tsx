@@ -7,7 +7,8 @@ import './sleep.css';
 import { PieChart } from '@mui/x-charts';
 interface DataItem {
   Id: number; // Adjust the type based on your actual data structure
-  average_value_heart_rate: number;
+  Date: string
+  average_waterIntake: number;
   // Add other properties as needed
 }
 
@@ -20,7 +21,7 @@ interface DataItem {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get<DataItem[]>('http://localhost:4000/average_canineone');
+          const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDayCanineOne');
           setData(response.data);
           setLoading(false);
         } catch (error) {
@@ -34,7 +35,10 @@ interface DataItem {
     }, []);
   
     if (loading) return <p>Loading...</p>
-    
+    const chartData = data.map(item => ({
+      name: item.Date,
+      value: item.average_waterIntake
+    }));
   return (
     <main>
         <div>
@@ -42,37 +46,23 @@ interface DataItem {
           </div>
           <div> <h1> Sleep Page </h1>
           
-            
+          <PieChart
+              dataset={chartData}
+              xAxis={[{ scaleType: 'band', data: data.map(item => item.Date) }]}
+              series={[
+                {
+                  data: [
+                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Sleeping'},
+                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Normal'},
+                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Eating'},
+                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Walking'},
+                  ]
+                },
+              ]}
+              width={1000}
+              height={400}
+            />
 
-            
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>{error}</p>
-          ) : (
-            <ul>
-              {data.map((item) => (
-                <p key={item.Id}>
-                  <PieChart
-                    series={[{
-                      data: [
-                        { id: 0, value: 10, label: 'Sleeping' },
-                        { id: 1, value: 15, label: 'Normal' },
-                        { id: 2, value: 20, label: 'Eating' },
-                        { id: 2, value: 20, label: 'Walking' },
-                      ],
-                    },]}
-                    width={400}
-                    height={200}
-                  />
-                </p>
-              ))}
-              
-            </ul>
-
-            
-          )}
-          
           </div>
           <div>
             <Footer/>

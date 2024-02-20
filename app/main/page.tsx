@@ -170,7 +170,7 @@ export default function Main() {
               Water Intake 
               <Link href={'/water'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              <p>Average x ml a day</p>
+              <p>Average {data.map(item => item.average_waterIntake)} ml a day</p>
             </div>
             <div className="card">
               Heart Rate 

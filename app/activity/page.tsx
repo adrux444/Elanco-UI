@@ -49,7 +49,7 @@ export default function Login() {
 
           <BarChart
               dataset={chartData}
-              xAxis={[{ scaleType: 'band', data: data.map(item => item.Date) }]}
+              xAxis={[{ scaleType: 'band', data: data.map(item => item.Date)}]}
               series={[
                 {
                   data: data.map(item => item.average_activityLevelSteps),
