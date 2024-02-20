@@ -1,18 +1,18 @@
 "use client";
+
+import axios from "axios";
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
-import './weight.css';
+import './temperature.css';
 import * as React from 'react';
 import { LineChart } from '@mui/x-charts';
 import { useState } from "react";
-import axios from "axios";
+
 interface DataItem {
   Id: number;
-  average_weight: number;
+  average_temperature: number;
 }
-
-export default function Weight() {
-
+export default function Temperature() {
   const [data, setData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,8 +40,8 @@ export default function Weight() {
     <main>
       <div>
         <NavBar/>
-        </div>
-        <div> <h1> Weight Page </h1>
+      </div>
+      <div><h1> Temperature Page </h1>
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
@@ -52,18 +52,17 @@ export default function Weight() {
             <li key={item.Id}>
               <LineChart
                 xAxis={[{ data: [1, 2, 3, 4, 5, 6 , 7] }]}
-                series={[{ data: [item.average_weight, item.average_weight, item.average_weight, item.average_weight, item.average_weight, item.average_weight], color: '#e15759', curve: "linear" },]}
+                series={[{ data: [item.average_temperature, item.average_temperature, item.average_temperature, item.average_temperature, item.average_temperature, item.average_temperature], color: '#e15759', curve: "linear" },]}
                 width={500}
                 height={300} />
             </li>
             ))}
           </ul>
         )}
-        </div>
-
-        <div>
-          <Footer/>
-        </div>
+      </div>
+      <div>
+        <Footer />
+      </div>
     </main>
   );
 }
