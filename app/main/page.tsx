@@ -18,9 +18,15 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 // }
 interface DataItem {
   Id: number; // Adjust the type based on your actual data structure
-  average_activityLevelSteps: number;
+  Date: string
+  average_value_heart_rate: number;
+  average_temperature: number;
+  average_weight: number;
+  average_breathing: number;
   average_calorieBurn: number;
-  // Add other properties as needed
+  average_activityLevelSteps: number;
+  average_foodIntake: number;
+  average_waterIntake: number;
 }
 
 
@@ -36,7 +42,7 @@ export default function Main() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<DataItem[]>('http://localhost:4000/average');
+        const response = await axios.get<DataItem[]>('http://localhost:4000/average_canineone');
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -98,7 +104,18 @@ export default function Main() {
   //   fetchData();
   // }, []);
 
-
+  if (loading) return <p>Loading...</p>
+  
+  const chartData = data.map(item => ({
+    hr: item.average_value_heart_rate,
+    temp: item.average_temperature,
+    wei: item.average_weight,
+    breath: item.average_breathing,
+    cal: item.average_calorieBurn,
+    step: item.average_activityLevelSteps,
+    food: item.average_foodIntake,
+    water: item.average_waterIntake
+  }));
 
   return (
     <main>
@@ -127,22 +144,7 @@ export default function Main() {
               
             <h1><div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
 
-            {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>{error}</p>
-          ) : (
-            <ul>
-              {data.map((item) => (
-                <li key={item.Id}>{item.average_activityLevelSteps}, {item.average_calorieBurn}</li>
-              ))}
-            </ul>
 
-
-
-//                 <li key={item.Id}>{item.average_calorieBurn}</li>
-
-          )}
 
           </div>
           <div className="cards">
@@ -150,15 +152,13 @@ export default function Main() {
               Activity Level 
               <Link href={'/activity'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              {/* {data && (
-        <p>Average {data.average_activityLevelSteps} steps a day</p>
-      )} */}
+              <p>Average {data.map(item => item.average_activityLevelSteps)} steps a day</p>
             </div>
             <div className="card">
               Calories 
               <Link href={'/calories'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              <p>Average x calories burned a day</p>
+              <p>Average {data.map(item => item.average_calorieBurn)} calories burned a day</p>
             </div>
             <div className="card">
               Sleep 
@@ -176,25 +176,25 @@ export default function Main() {
               Heart Rate 
               <Link href={'/heart'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              <p>Average x beats per minute</p>
+              <p>Average {data.map(item => item.average_value_heart_rate)} beats per minute</p>
             </div>
             <div className="card">
               Breathing Rate 
               <Link href={'/breathing'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              <p>Average x breaths per minute</p>
+              <p>Average {data.map(item => item.average_breathing)} breaths per minute</p>
             </div>
             <div className="card">
               Temperature 
               <Link href={'/temp'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              <p>Average x°c</p>
+              <p>Average {data.map(item => item.average_temperature)}°c</p>
             </div>
             <div className="card">
               Weight 
               <Link href={'/weight'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              <p>Average xkg</p>
+              <p>Average {data.map(item => item.average_weight)}kg</p>
             </div>
             <div className="card">
               Extra card 
