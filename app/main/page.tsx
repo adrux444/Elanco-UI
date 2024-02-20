@@ -126,7 +126,6 @@ export default function Main() {
             </div>
               
             <h1><div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
-            <h1>Welcome <div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
 
             {loading ? (
             <p>Loading...</p>
