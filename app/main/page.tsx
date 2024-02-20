@@ -1,24 +1,17 @@
-<<<<<<< HEAD
-"use client";
-import React, { useState, useEffect } from "react";
-=======
 "use client"; // This is a client component 👈🏽
 
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
->>>>>>> 33e8a32b92074aafa648c56dac057ec20887fce4
 import "./main.css";
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
 import Link from "next/link";
-<<<<<<< HEAD
 import { Box } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-=======
 // interface Data {
 //   average_activityLevelSteps: number; // Adjust the type accordingly
 //   // Add other properties as needed
@@ -31,7 +24,6 @@ interface DataItem {
 }
 
 
->>>>>>> 33e8a32b92074aafa648c56dac057ec20887fce4
 export default function Main() {
 
   // const [data, setData] = useState([]);
@@ -70,7 +62,6 @@ export default function Main() {
   //   }
   // }
   
-<<<<<<< HEAD
   const [dog, setDog] = useState<string>('');
   
   const handleChange = (event: SelectChangeEvent) => {
@@ -90,7 +81,6 @@ export default function Main() {
   const dogLabel = dog || "Select Dog";
   
   
-=======
   // useEffect(() => {
   //   getData();
   // }, []);
@@ -110,13 +100,11 @@ export default function Main() {
 
 
 
->>>>>>> 33e8a32b92074aafa648c56dac057ec20887fce4
   return (
     <main>
         <div>
           <NavBar/>
           <div className="title">
-<<<<<<< HEAD
             <h1>Welcome </h1>
             <div>
               <Box sx={{ maxWidth: '20%' }}>
@@ -138,8 +126,6 @@ export default function Main() {
             </div>
               
             <h1><div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
-=======
-            <h1>Welcome <div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
 
             {loading ? (
             <p>Loading...</p>
@@ -158,7 +144,6 @@ export default function Main() {
 
           )}
 
->>>>>>> 33e8a32b92074aafa648c56dac057ec20887fce4
           </div>
           <div className="cards">
             <div className="card">
