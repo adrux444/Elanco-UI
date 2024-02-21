@@ -6,21 +6,37 @@ import Footer from "../footer/page";
 import NavBar from "../navbar/page";
 import './activity.css';
 import { BarChart } from '@mui/x-charts';
+import { Box, Button, ButtonGroup } from "@mui/material";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import url from 'url'
+import querystring from 'querystring'
+
 interface DataItem {
   Id: number; // Adjust the type based on your actual data structure
   Date: string
   average_activityLevelSteps: number;
   // Add other properties as needed
 }
+const currentUrl = window.location.href;
+const urlObj = new URL(currentUrl);
+let dogNum = urlObj.searchParams.get('dog')
+console.log(dogNum)
+
 export default function Login() {
   const [data, setData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [anotherData, setAnotherData] = useState<DataItem[]>([]);
+  const [anotherLoading, setAnotherLoading] = useState(true);
+  const [anotherError, setAnotherError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDayCanineOne');
+        const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDay' + dogNum);
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -30,12 +46,55 @@ export default function Login() {
       }
     };
 
+
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchAnotherData = async () => {
+      try {
+        const response = await axios.get<DataItem[]>('http://localhost:4000/average_' + dogNum);
+        setAnotherData(response.data);
+        setAnotherLoading(false);
+      } catch (error) {
+        console.error('Error fetching another data:', error);
+        setAnotherError('Error fetching another data');
+        setAnotherLoading(false);
+      }
+    };
+  
+    fetchAnotherData();
+  }, []);
+
+  const [dog, setDog] = useState<string>('');
+  
+  const handleDogChange = (value: string) => {
+    setDog(value);
+  };
+
+  const dogOptions = ['canineone', 'caninetwo', 'caninethree'];
+
+  
+
+  useEffect(() => {
+    if (dog !== '') {
+      var url = require('url');
+      const adr = new URL('http://localhost:3000/activity');
+      adr.searchParams.append('dog', dog);
+      window.location.href = adr.toString();
+    }
+  }, [dog]);
+
+
 
   if (loading) return <p>Loading...</p>
 
   const chartData = data.map(item => ({
+    name: item.Date,
+    value: item.average_activityLevelSteps
+  }));
+
+  const anotherChartData = anotherData.map(item => ({
     name: item.Date,
     value: item.average_activityLevelSteps
   }));
@@ -46,13 +105,24 @@ export default function Login() {
           <NavBar/>
           </div>
           <div> <h1> Activity Page </h1>
-
+            <div>
+            <Box>
+                <ButtonGroup variant="contained">
+                  {dogOptions.map(option => (
+                    <Button key={option} onClick={() => handleDogChange(option)} disabled={option === dogNum}>
+                      {option}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+            </Box>
+            </div>
+          <h2>Daily Average {anotherData.map(item => item.average_activityLevelSteps)} steps </h2>
           <BarChart
               dataset={chartData}
-              xAxis={[{ scaleType: 'band', data: data.map(item => item.Date) }]}
+              xAxis={[{ scaleType: 'band', data: data.map(item => item.Date)}]}
               series={[
                 {
-                  data: data.map(item => item.average_activityLevelSteps),
+                  data: data.map(item => item.average_activityLevelSteps), 
                 },
               ]}
               width={1000}

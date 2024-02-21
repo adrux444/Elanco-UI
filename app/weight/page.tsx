@@ -8,6 +8,7 @@ import { LineChart } from '@mui/x-charts';
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+
 interface DataItem {
   Id: number;
   average_weight: number;

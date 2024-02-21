@@ -5,11 +5,19 @@ import Footer from "../footer/page";
 import NavBar from "../navbar/page";
 import './sleep.css';
 import { PieChart } from '@mui/x-charts';
+import { Box, Button, ButtonGroup, SelectChangeEvent } from "@mui/material";
+
 interface DataItem {
   Id: number; // Adjust the type based on your actual data structure
-  average_value_heart_rate: number;
+  Date: string
+  average_waterIntake: number;
   // Add other properties as needed
 }
+
+const currentUrl = window.location.href;
+const urlObj = new URL(currentUrl);
+let dogNum = urlObj.searchParams.get('dog')
+console.log(dogNum)
 
   
   export default function Login() {
@@ -20,7 +28,9 @@ interface DataItem {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get<DataItem[]>('http://localhost:4000/average_canineone');
+          var http = require('http');
+          
+          const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDayCanineOne');
           setData(response.data);
           setLoading(false);
         } catch (error) {
@@ -32,47 +42,71 @@ interface DataItem {
   
       fetchData();
     }, []);
+
+    const [dog, setDog] = useState<string>('');
+  
+  const handleChange = (event: SelectChangeEvent) => {
+    setDog(event.target.value);
+  };
+
+  useEffect(() => {
+    if (dog !== '') {
+      var url = require('url');
+      const adr = new URL('http://localhost:3000/main');
+      adr.searchParams.append('dog', dog);
+      window.location.href = adr.toString();
+    }
+  }, [dog]);
+
+  const handleDogChange = (value: string) => {
+    setDog(value);
+  };
+
+  const dogOptions = ['canineone', 'caninetwo', 'caninethree'];
+
+  
   
     if (loading) return <p>Loading...</p>
-    
+    const chartData = data.map(item => ({
+      name: item.Date,
+      value: item.average_waterIntake
+    }));
   return (
     <main>
         <div>
           <NavBar/>
           </div>
           <div> <h1> Sleep Page </h1>
-          
-            
 
-            
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>{error}</p>
-          ) : (
-            <ul>
-              {data.map((item) => (
-                <p key={item.Id}>
-                  <PieChart
-                    series={[{
-                      data: [
-                        { id: 0, value: 10, label: 'Sleeping' },
-                        { id: 1, value: 15, label: 'Normal' },
-                        { id: 2, value: 20, label: 'Eating' },
-                        { id: 2, value: 20, label: 'Walking' },
-                      ],
-                    },]}
-                    width={400}
-                    height={200}
-                  />
-                </p>
-              ))}
-              
-            </ul>
-
-            
-          )}
+          <div>
+            <Box>
+                <ButtonGroup variant="contained">
+                  {dogOptions.map(option => (
+                    <Button key={option} onClick={() => handleDogChange(option)} disabled={option === dogNum}>
+                      {option}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+            </Box>
+            </div>
           
+          <PieChart
+              dataset={chartData}
+              xAxis={[{ scaleType: 'band', data: data.map(item => item.Date) }]}
+              series={[
+                {
+                  data: [
+                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Sleeping'},
+                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Normal'},
+                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Eating'},
+                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Walking'},
+                  ]
+                },
+              ]}
+              width={1000}
+              height={400}
+            />
+
           </div>
           <div>
             <Footer/>
