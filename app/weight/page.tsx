@@ -1,27 +1,31 @@
 "use client";
+
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
 import './weight.css';
 import * as React from 'react';
 import { LineChart } from '@mui/x-charts';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+
 interface DataItem {
   Id: number;
   average_weight: number;
+  Date: number;
 }
 
-export default function Weight() {
 
+// ...
+
+export default function Weight() {
   const [data, setData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [chartData, setChartData] = useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<DataItem[]>('http://localhost:4000/average');
+        const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDayCanineOne');
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -34,36 +38,42 @@ export default function Weight() {
     fetchData();
   }, []);
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <p>Loading...</p>;
 
   return (
     <main>
       <div>
-        <NavBar/>
-        </div>
-        <div> <h1> Weight Page </h1>
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
+        <NavBar />
+      </div>
+      <div>
+        <h1>Weight Page</h1>
+        {error ? (
           <p>{error}</p>
         ) : (
-          <ul>
-            {data.map((item) => (
-            <li key={item.Id}>
-              <LineChart
-                xAxis={[{ data: [1, 2, 3, 4, 5, 6 , 7] }]}
-                series={[{ data: [item.average_weight, item.average_weight, item.average_weight, item.average_weight, item.average_weight, item.average_weight], color: '#e15759', curve: "linear" },]}
-                width={500}
-                height={300} />
-            </li>
-            ))}
-          </ul>
+          <LineChart
+           // xAxis={[{ data: data.map((item) => item.Date) }]}
+            xAxis={[{ scaleType: 'band', data: data.map(item => item.Date) }]}
+            series={[
+              {
+                data: data.map((item) => item.average_weight),
+                color: '#e15759',
+                curve: 'linear',
+              },
+            ]}
+            width={500}
+            height={300}
+          />
         )}
-        </div>
-
-        <div>
-          <Footer/>
-        </div>
+      </div>
+      <div>
+        <Footer />
+      </div>
     </main>
   );
 }
+
+
+
+
+
+
