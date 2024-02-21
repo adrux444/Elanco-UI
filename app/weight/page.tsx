@@ -6,6 +6,7 @@ import * as React from 'react';
 import { LineChart } from '@mui/x-charts';
 import { useState } from "react";
 import axios from "axios";
+
 interface DataItem {
   Id: number;
   average_weight: number;
@@ -21,7 +22,7 @@ export default function Weight() {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<DataItem[]>('http://localhost:4000/average');
+        const response = await axios.get<DataItem[]>('http://localhost:4000/average_canineone');
         setData(response.data);
         setLoading(false);
       } catch (error) {

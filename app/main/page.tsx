@@ -62,9 +62,21 @@ export default function Main() {
     fetchData();
   }, []);
 
+  // const [data, setData] = useState<Data | null>(null);
+
+  // async function getData() {
+  //   try {
+  //     const res = await fetch(`http://localhost:4000/average`);
+  //     const jsonData: Data = await res.json();
+  //     console.log("Received data:", jsonData);
+  //     setData(jsonData);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // }
   
   const [dog, setDog] = useState<string>('');
-  
+
   const handleChange = (event: SelectChangeEvent) => {
     setDog(event.target.value);
   };
@@ -81,8 +93,26 @@ export default function Main() {
 
   const dogLabel = dog || "Select Dog";
   
-  if (loading) return <p>Loading...</p>
   
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:4000/average');
+  //       setData(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+  if (loading) return <p>Loading...</p>
+
   const chartData = data.map(item => ({
     hr: item.average_value_heart_rate,
     temp: item.average_temperature,
@@ -118,10 +148,8 @@ export default function Main() {
                 </FormControl>
               </Box>
             </div>
-              
+
             <h1><div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
-
-
 
           </div>
           <div className="cards">
@@ -163,7 +191,7 @@ export default function Main() {
             </div>
             <div className="card">
               Temperature 
-              <Link href={'/temp'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/temperature'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_temperature)}°c</p>
             </div>
