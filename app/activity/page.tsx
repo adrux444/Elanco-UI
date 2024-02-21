@@ -6,7 +6,7 @@ import Footer from "../footer/page";
 import NavBar from "../navbar/page";
 import './activity.css';
 import { BarChart } from '@mui/x-charts';
-import { Box } from "@mui/material";
+import { Box, Button, ButtonGroup } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -68,9 +68,13 @@ export default function Login() {
 
   const [dog, setDog] = useState<string>('');
   
-  const handleChange = (event: SelectChangeEvent) => {
-    setDog(event.target.value);
+  const handleDogChange = (value: string) => {
+    setDog(value);
   };
+
+  const dogOptions = ['canineone', 'caninetwo', 'caninethree'];
+
+  
 
   useEffect(() => {
     if (dog !== '') {
@@ -82,7 +86,6 @@ export default function Login() {
   }, [dog]);
 
 
-  const dogLabel = dog || "Select Dog";
 
   if (loading) return <p>Loading...</p>
 
@@ -103,22 +106,15 @@ export default function Login() {
           </div>
           <div> <h1> Activity Page </h1>
             <div>
-            <Box sx={{ maxWidth: '20%' }}>
-              <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">{dogLabel}</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={dogLabel}
-                    label="Dog"
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={'canineone'}>Canine 1</MenuItem>
-                    <MenuItem value={'caninetwo'}>Canine 2</MenuItem>
-                    <MenuItem value={'caninethree'}>Canine 3</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
+            <Box>
+                <ButtonGroup variant="contained">
+                  {dogOptions.map(option => (
+                    <Button key={option} onClick={() => handleDogChange(option)} disabled={option === dogNum}>
+                      {option}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+            </Box>
             </div>
           <h2>Daily Average {anotherData.map(item => item.average_activityLevelSteps)} steps </h2>
           <BarChart
