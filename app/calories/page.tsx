@@ -27,6 +27,9 @@ export default function Login() {
   const [data, setData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [anotherData, setAnotherData] = useState<DataItem[]>([]);
+  const [anotherLoading, setAnotherLoading] = useState(true);
+  const [anotherError, setAnotherError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +45,22 @@ export default function Login() {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchAnotherData = async () => {
+      try {
+        const response = await axios.get<DataItem[]>('http://localhost:4000/average_' + dogNum);
+        setAnotherData(response.data);
+        setAnotherLoading(false);
+      } catch (error) {
+        console.error('Error fetching another data:', error);
+        setAnotherError('Error fetching another data');
+        setAnotherLoading(false);
+      }
+    };
+  
+    fetchAnotherData();
   }, []);
 
   const [dog, setDog] = useState<string>('');
@@ -87,6 +106,8 @@ export default function Login() {
                 </ButtonGroup>
             </Box>
             </div>
+            <h2>Daily Average {anotherData.map(item => item.average_calorieBurn)}kcal burned </h2>
+          
           <BarChart
               xAxis={[{ scaleType: 'band', data: data.map(item => item.Date) }]}
               series={[
