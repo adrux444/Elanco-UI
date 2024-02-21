@@ -12,6 +12,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import url from 'url'
+import querystring from 'querystring'
 // interface Data {
 //   average_activityLevelSteps: number; // Adjust the type accordingly
 //   // Add other properties as needed
@@ -29,6 +31,11 @@ interface DataItem {
   average_waterIntake: number;
 }
 
+const currentUrl = window.location.href;
+const urlObj = new URL(currentUrl);
+let dogNum = urlObj.searchParams.get('dog')
+console.log(dogNum)
+
 
 export default function Main() {
 
@@ -42,7 +49,7 @@ export default function Main() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<DataItem[]>('http://localhost:4000/average_canineone');
+        const response = await axios.get<DataItem[]>('http://localhost:4000/average_'+dogNum);
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -55,18 +62,6 @@ export default function Main() {
     fetchData();
   }, []);
 
-  // const [data, setData] = useState<Data | null>(null);
-
-  // async function getData() {
-  //   try {
-  //     const res = await fetch(`http://localhost:4000/average`);
-  //     const jsonData: Data = await res.json();
-  //     console.log("Received data:", jsonData);
-  //     setData(jsonData);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // }
   
   const [dog, setDog] = useState<string>('');
   
@@ -86,24 +81,6 @@ export default function Main() {
 
   const dogLabel = dog || "Select Dog";
   
-  
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get('http://localhost:4000/average');
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
   if (loading) return <p>Loading...</p>
   
   const chartData = data.map(item => ({
@@ -134,9 +111,9 @@ export default function Main() {
                     label="Dog"
                     onChange={handleChange}
                   >
-                    <MenuItem value={'canine1'}>Canine 1</MenuItem>
-                    <MenuItem value={'canine2'}>Canine 2</MenuItem>
-                    <MenuItem value={'canine3'}>Canine 3</MenuItem>
+                    <MenuItem value={'canineone'}>Canine 1</MenuItem>
+                    <MenuItem value={'caninetwo'}>Canine 2</MenuItem>
+                    <MenuItem value={'caninethree'}>Canine 3</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -150,13 +127,13 @@ export default function Main() {
           <div className="cards">
             <div className="card">
               Activity Level 
-              <Link href={'/activity'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/activity?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_activityLevelSteps)} steps a day</p>
             </div>
             <div className="card">
               Calories 
-              <Link href={'/calories'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/calories?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_calorieBurn)} calories burned a day</p>
             </div>
@@ -170,7 +147,7 @@ export default function Main() {
               Water Intake 
               <Link href={'/water'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              <p>Average x ml a day</p>
+              <p>Average {data.map(item => item.average_waterIntake)} ml a day</p>
             </div>
             <div className="card">
               Heart Rate 
