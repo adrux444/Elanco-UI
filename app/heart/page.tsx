@@ -1,43 +1,15 @@
 "use client";
+import React, { useState, useEffect } from 'react';
+import { LineChart } from '@mui/x-charts';
+import axios from "axios";
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
 import './heart.css';
-import * as React from 'react';
-import { LineChart } from '@mui/x-charts';
-import { useState, useEffect } from "react";
-import { styled } from '@mui/material/styles';
-import axios from "axios";
-
-const StyledPath = styled('path')(({ theme }) => ({
-  fill: 'none',
-  stroke: theme.palette.text.primary,
-  shapeRendering: 'crispEdges',
-  strokeWidth: 1,
-  pointerEvents: 'none',
-}));
-
-const StyledText = styled('text')(({ theme }) => ({
-  stroke: 'none',
-  fill: theme.palette.text.primary,
-  shapeRendering: 'crispEdges',
-}));
 
 interface DataItem {
   Id: number;
-  Date: string
+  Date: string;
   average_value_heart_rate: number;
-}
-
-// Function to check if a date is in the given week
-function isDateInWeek(date: string, week: string): boolean {
-  // Assuming date format is "YYYY-MM-DD"
-  const startDateOfWeek = new Date(week);
-  const endDateOfWeek = new Date(week);
-  endDateOfWeek.setDate(endDateOfWeek.getDate() + 6); // Assuming a week starts from Sunday and ends on Saturday
-
-  const currentDate = new Date(date);
-
-  return currentDate >= startDateOfWeek && currentDate <= endDateOfWeek;
 }
 
 export default function Heart() {
@@ -62,26 +34,15 @@ export default function Heart() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (data.length > 0) {
-      const lastWeek = getUniqueWeeks(data).pop(); 
-      setSelectedWeek(lastWeek || "");
-    }
-  }, [data]);
-
   if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   const handleWeekChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSelectedWeek(event.target.value as string);
   };
 
   const filteredData = selectedWeek ? data.filter(item => isDateInWeek(item.Date, selectedWeek)) : data;
-
-  const chartData = filteredData.map(item => ({
-    name: item.Date,
-    value: item.average_value_heart_rate
-  }));
-
+  
   return (
     <main>
       <div>
@@ -98,13 +59,13 @@ export default function Heart() {
 
         <LineChart
           xAxis={[{ scaleType: 'band', data: filteredData.map(item => item.Date) }]}
-          series=
-          {[
-            { color: "#FF0000",
-            type: "line",
-            data: filteredData.map(item =>
-              item.average_value_heart_rate),
-              curve: "linear" }
+          series={[
+            {
+              color: "#FF0000",
+              type: "line",
+              data: filteredData.map(item => item.average_value_heart_rate),
+              curve: "linear"
+            }
           ]}
           width={1950}
           height={600}
@@ -117,11 +78,22 @@ export default function Heart() {
   );
 }
 
-// Function to get unique weeks from the data
-function getUniqueWeeks(data: DataItem[]): string[] {
-  // Implement your logic to extract unique weeks from the data
-  // For simplicity, you can extract the week part of each date
-  // This logic may vary based on your specific requirements and date format
-  const weeks = data.map(item => item.Date.substring(0, 10)); // Assuming date format is "YYYY-MM-DD"
-  return Array.from(new Set(weeks));
+function isDateInWeek(date: string, week: string): boolean {
+  const startDateOfWeek = parseDate(week);
+  const endDateOfWeek = new Date(startDateOfWeek);
+  endDateOfWeek.setDate(endDateOfWeek.getDate() + 6);
+
+  const currentDate = parseDate(date);
+
+  return currentDate >= startDateOfWeek && currentDate <= endDateOfWeek;
 }
+
+function parseDate(dateString: string): Date {
+  const [day, month, year] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+const getUniqueWeeks = (data: DataItem[]): string[] => {
+  const weeks = data.map(item => item.Date.substring(0, 10));
+  return Array.from(new Set(weeks));
+};
