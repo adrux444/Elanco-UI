@@ -8,10 +8,11 @@ import { PieChart } from '@mui/x-charts';
 import { Box, Button, ButtonGroup, SelectChangeEvent } from "@mui/material";
 
 interface DataItem {
-  Id: number; // Adjust the type based on your actual data structure
-  Date: string
-  average_waterIntake: number;
-  // Add other properties as needed
+  DogID: number; // Adjust the type based on your actual data structure
+  AverageWalkingHours: number;
+  AverageHoursSlept: number;
+  AverageNormalHours:number;
+  AverageEatingHours: number;
 }
 
 const currentUrl = window.location.href;
@@ -30,7 +31,7 @@ console.log(dogNum)
         try {
           var http = require('http');
           
-          const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDayCanineOne');
+          const response = await axios.get<DataItem[]>('http://localhost:4000/BehaviourPatternActionsAverage' + dogNum);
           setData(response.data);
           setLoading(false);
         } catch (error) {
@@ -52,7 +53,7 @@ console.log(dogNum)
   useEffect(() => {
     if (dog !== '') {
       var url = require('url');
-      const adr = new URL('http://localhost:3000/main');
+      const adr = new URL('http://localhost:3000/sleep');
       adr.searchParams.append('dog', dog);
       window.location.href = adr.toString();
     }
@@ -68,9 +69,28 @@ console.log(dogNum)
   
     if (loading) return <p>Loading...</p>
     const chartData = data.map(item => ({
-      name: item.Date,
-      value: item.average_waterIntake
+      ID: item.DogID,
+      walk: item.AverageWalkingHours,
+      sleep: item.AverageHoursSlept,
+      norm: item.AverageNormalHours,
+      eat: item.AverageEatingHours,
     }));
+
+
+    const totalSleepingHours = data.reduce((total, item) => total + item.AverageHoursSlept, 0);
+    const totalNormalHours = data.reduce((total, item) => total + item.AverageNormalHours, 0);
+    const totalEatingHours = data.reduce((total, item) => total + item.AverageEatingHours, 0);
+    const totalWalkingHours = data.reduce((total, item) => total + item.AverageWalkingHours, 0);
+    console.log(totalSleepingHours)
+    // Define series data
+    const seriesData = [
+      { id: 0, value: totalSleepingHours, label: 'Sleeping' },
+      { id: 1, value: totalNormalHours, label: 'Normal' },
+      { id: 2, value: totalEatingHours, label: 'Eating' },
+      { id: 3, value: totalWalkingHours, label: 'Walking' },
+    ];
+
+
   return (
     <main>
         <div>
@@ -92,17 +112,7 @@ console.log(dogNum)
           
           <PieChart
               dataset={chartData}
-              xAxis={[{ scaleType: 'band', data: data.map(item => item.Date) }]}
-              series={[
-                {
-                  data: [
-                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Sleeping'},
-                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Normal'},
-                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Eating'},
-                    //{id:0, value: data.map(item => item.average_waterIntake), label: 'Walking'},
-                  ]
-                },
-              ]}
+              series= {[{ data: seriesData }]}
               width={1000}
               height={400}
             />

@@ -29,6 +29,12 @@ interface DataItem {
   average_activityLevelSteps: number;
   average_foodIntake: number;
   average_waterIntake: number;
+
+  DogID: string;
+  AverageWalkingHours: number;
+  AverageHoursSlept: number;
+  AverageNormalHours:number;
+  AverageEatingHours: number;
 }
 
 const currentUrl = window.location.href;
@@ -45,6 +51,9 @@ export default function Main() {
   const [data, setData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [anotherData, setAnotherData] = useState<DataItem[]>([]);
+  const [anotherLoading, setAnotherLoading] = useState(true);
+  const [anotherError, setAnotherError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +69,22 @@ export default function Main() {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchAnotherData = async () => {
+      try {
+        const response = await axios.get<DataItem[]>('http://localhost:4000/BehaviourPatternActionsAverage' + dogNum);
+        setAnotherData(response.data);
+        setAnotherLoading(false);
+      } catch (error) {
+        console.error('Error fetching another data:', error);
+        setAnotherError('Error fetching another data');
+        setAnotherLoading(false);
+      }
+    };
+  
+    fetchAnotherData();
   }, []);
 
   // const [data, setData] = useState<Data | null>(null);
@@ -128,6 +153,12 @@ export default function Main() {
     water: item.average_waterIntake
   }));
 
+  const anotherChartData = anotherData.map(item => ({
+    ID: item.DogID,
+    sleep: item.AverageHoursSlept,
+
+  }));
+
   return (
     <main>
         <div>
@@ -164,7 +195,7 @@ export default function Main() {
               Sleep 
               <Link href={'/sleep?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              <p>Average x hours a day</p>
+              <p>Average {anotherData.map(item => item.AverageHoursSlept)} hours a day</p>
             </div>
             <div className="card">
               Water Intake 
