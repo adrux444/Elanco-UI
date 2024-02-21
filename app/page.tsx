@@ -1,9 +1,9 @@
 import "./home.css";
 import NavBar from "./navbar/page";
 import Image from "next/image"
-import Link from 'next/link'
 import Button from '@mui/joy/Button';
 import Footer from "./footer/page";
+import { Link } from "@mui/material";
 
 export default function Home() {
   return (
@@ -31,10 +31,10 @@ export default function Home() {
         <br />
         <div className="login-container">
           <h3>Login or Sign Up now to find out more!</h3>
-          <Link href="/login">
+          <Link href="/login" style={{ textDecoration: 'none' }}>
             <Button className="button">Login</Button>
           </Link>
-          <Link href="/register">
+          <Link href="/register" style={{ textDecoration: 'none' }}>
             <Button className="button">Sign Up</Button>
           </Link>
         </div>

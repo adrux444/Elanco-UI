@@ -1,8 +1,10 @@
+"use client";
 import "./login.css";
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
+import { Link } from "@mui/material";
 
 export default function Login() {
 
@@ -27,7 +29,9 @@ export default function Login() {
               <br />
               <br />
               <div>
-                <Button style={{width:"15%"}}>Login</Button>
+              <Link href="/main?dog=canineone" style={{ textDecoration: 'none' }}>
+                  <Button style={{width:"15%"}}>Login</Button>
+                </Link>
               </div>
             </div>
           </div>
