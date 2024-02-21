@@ -163,7 +163,7 @@ export default function Main() {
             </div>
             <div className="card">
               Temperature 
-              <Link href={'/temp'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/temperature'}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_temperature)}°c</p>
             </div>
