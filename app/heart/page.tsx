@@ -16,7 +16,7 @@ export default function Heart() {
   const [data, setData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedWeek, setSelectedWeek] = useState<string>("");
+  const [selectedDates, setSelectedDates] = useState<{ [key: number]: string | null }>({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,63 +37,72 @@ export default function Heart() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
-  const handleWeekChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedWeek(event.target.value as string);
+  const years = [2021, 2022, 2023];
+
+  const handleDateChange = (year: number, date: string | null) => {
+    setSelectedDates(prevState => ({
+      ...prevState,
+      [year]: date
+    }));
   };
 
-  const filteredData = selectedWeek ? data.filter(item => isDateInWeek(item.Date, selectedWeek)) : data;
-  
   return (
     <main>
       <div>
-        <NavBar/>
+        <NavBar />
       </div>
       <div>
-        <h1> Heart Rate Page </h1>
-        <select value={selectedWeek} onChange={handleWeekChange}>
-          <option value="">All data</option>
-          {getUniqueWeeks(data).map(week => (
-            <option key={week} value={week}>{week}</option>
-          ))}
-        </select>
-
-        <LineChart
-          xAxis={[{ scaleType: 'band', data: filteredData.map(item => item.Date) }]}
-          series={[
-            {
-              color: "#FF0000",
-              type: "line",
-              data: filteredData.map(item => item.average_value_heart_rate),
-              curve: "linear"
-            }
-          ]}
-          width={1950}
-          height={600}
-        />
+        <h1>Heart Rate Page</h1>
+        {years.map((year, index) => (
+          <div key={index}>
+            <h2>{year}</h2>
+            <div>
+              <label>Select Day and Month: </label>
+              <input
+                type="text"
+                placeholder="DD-MM"
+                value={selectedDates[year] || ''}
+                onChange={(e) => handleDateChange(year, e.target.value)}
+              />
+            </div>
+            <LineChart
+              xAxis={[{ scaleType: 'band', data: getFilteredData(year).map(item => item.Date) }]}
+              series={[
+                {
+                  color: "#FF0000",
+                  type: "line",
+                  data: getFilteredData(year).map(item => item.average_value_heart_rate),
+                  curve: "linear"
+                }
+              ]}
+              width={1950}
+              height={600}
+            />
+          </div>
+        ))}
       </div>
       <div>
-        <Footer/>
+        <Footer />
       </div>
     </main>
   );
+
+  function getFilteredData(year: number): DataItem[] {
+    if (!selectedDates[year]) {
+      return data.filter(item => new Date(item.Date).getFullYear() === year);
+    } else if (selectedDates[year]) {
+      const parts = selectedDates[year]!.split('-');
+      if (parts.length === 2) {
+        const [day, month] = parts.map(Number);
+        const startDate = new Date(year, month - 1, day);
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 6);
+        return data.filter(item => {
+          const date = new Date(item.Date);
+          return date >= startDate && date <= endDate;
+        });
+      }
+    }
+    return [];
+  }
 }
-
-function isDateInWeek(date: string, week: string): boolean {
-  const startDateOfWeek = parseDate(week);
-  const endDateOfWeek = new Date(startDateOfWeek);
-  endDateOfWeek.setDate(endDateOfWeek.getDate() + 6);
-
-  const currentDate = parseDate(date);
-
-  return currentDate >= startDateOfWeek && currentDate <= endDateOfWeek;
-}
-
-function parseDate(dateString: string): Date {
-  const [day, month, year] = dateString.split('-').map(Number);
-  return new Date(year, month - 1, day);
-}
-
-const getUniqueWeeks = (data: DataItem[]): string[] => {
-  const weeks = data.map(item => item.Date.substring(0, 10));
-  return Array.from(new Set(weeks));
-};
