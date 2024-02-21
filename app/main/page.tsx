@@ -7,7 +7,7 @@ import "./main.css";
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
 import Link from "next/link";
-import { Box } from "@mui/material";
+import { Box, Button, ButtonGroup } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -78,8 +78,12 @@ export default function Main() {
     }
   }, [dog]);
 
+  const handleDogChange = (value: string) => {
+    setDog(value);
+  };
 
-  const dogLabel = dog || "Select Dog";
+  const dogOptions = ['canineone', 'caninetwo', 'caninethree'];
+
   
   if (loading) return <p>Loading...</p>
   
@@ -101,29 +105,18 @@ export default function Main() {
           <div className="title">
             <h1>Welcome </h1>
             <div>
-              <Box sx={{ maxWidth: '20%' }}>
-              <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">{dogLabel}</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={dogLabel}
-                    label="Dog"
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={'canineone'}>Canine 1</MenuItem>
-                    <MenuItem value={'caninetwo'}>Canine 2</MenuItem>
-                    <MenuItem value={'caninethree'}>Canine 3</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
+            <Box>
+                <ButtonGroup variant="contained">
+                  {dogOptions.map(option => (
+                    <Button key={option} onClick={() => handleDogChange(option)} disabled={option === dogNum}>
+                      {option}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+            </Box>
             </div>
-              
             <h1><div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
-
-
-
-          </div>
+            </div>
           <div className="cards">
             <div className="card">
               Activity Level 
@@ -139,43 +132,43 @@ export default function Main() {
             </div>
             <div className="card">
               Sleep 
-              <Link href={'/sleep'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/sleep?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average x hours a day</p>
             </div>
             <div className="card">
               Water Intake 
-              <Link href={'/water'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/water?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_waterIntake)} ml a day</p>
             </div>
             <div className="card">
               Heart Rate 
-              <Link href={'/heart'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/heart?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_value_heart_rate)} beats per minute</p>
             </div>
             <div className="card">
               Breathing Rate 
-              <Link href={'/breathing'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/breathing?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_breathing)} breaths per minute</p>
             </div>
             <div className="card">
               Temperature 
-              <Link href={'/temp'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/temperature?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_temperature)}°c</p>
             </div>
             <div className="card">
               Weight 
-              <Link href={'/weight'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/weight?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_weight)}kg</p>
             </div>
             <div className="card">
               Extra card 
-              <Link href={'/activity'}><div className="viewmore">View more {">"}</div></Link>
+              <Link href={'/activity?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
             </div>
           </div>
           <br />

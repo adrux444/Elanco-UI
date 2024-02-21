@@ -5,12 +5,19 @@ import Footer from "../footer/page";
 import NavBar from "../navbar/page";
 import './sleep.css';
 import { PieChart } from '@mui/x-charts';
+import { Box, Button, ButtonGroup, SelectChangeEvent } from "@mui/material";
+
 interface DataItem {
   Id: number; // Adjust the type based on your actual data structure
   Date: string
   average_waterIntake: number;
   // Add other properties as needed
 }
+
+const currentUrl = window.location.href;
+const urlObj = new URL(currentUrl);
+let dogNum = urlObj.searchParams.get('dog')
+console.log(dogNum)
 
   
   export default function Login() {
@@ -35,6 +42,29 @@ interface DataItem {
   
       fetchData();
     }, []);
+
+    const [dog, setDog] = useState<string>('');
+  
+  const handleChange = (event: SelectChangeEvent) => {
+    setDog(event.target.value);
+  };
+
+  useEffect(() => {
+    if (dog !== '') {
+      var url = require('url');
+      const adr = new URL('http://localhost:3000/main');
+      adr.searchParams.append('dog', dog);
+      window.location.href = adr.toString();
+    }
+  }, [dog]);
+
+  const handleDogChange = (value: string) => {
+    setDog(value);
+  };
+
+  const dogOptions = ['canineone', 'caninetwo', 'caninethree'];
+
+  
   
     if (loading) return <p>Loading...</p>
     const chartData = data.map(item => ({
@@ -47,6 +77,18 @@ interface DataItem {
           <NavBar/>
           </div>
           <div> <h1> Sleep Page </h1>
+
+          <div>
+            <Box>
+                <ButtonGroup variant="contained">
+                  {dogOptions.map(option => (
+                    <Button key={option} onClick={() => handleDogChange(option)} disabled={option === dogNum}>
+                      {option}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+            </Box>
+            </div>
           
           <PieChart
               dataset={chartData}
