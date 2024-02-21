@@ -21,6 +21,8 @@ interface DataItem {
     useEffect(() => {
       const fetchData = async () => {
         try {
+          var http = require('http');
+          
           const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDayCanineOne');
           setData(response.data);
           setLoading(false);
