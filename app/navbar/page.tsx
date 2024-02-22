@@ -1,3 +1,6 @@
+
+"use client"; // This is a client component 👈🏽
+
 import "./navbar.css"
 import Image from "next/image"
 import { Link } from "@mui/material"
