@@ -64,7 +64,7 @@ export default function Heart() {
     setDog(value);
   };
 
-  const dogOptions = ['CanineOne', 'CanineTwo', 'CanineThree'];
+  const dogOptions = ['canineone', 'caninetwo', 'caninethree'];
 
   useEffect(() => {
     if (dog !== '') {
