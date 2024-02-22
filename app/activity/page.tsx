@@ -7,6 +7,7 @@ import NavBar from "../navbar/page";
 import './activity.css';
 import { BarChart } from '@mui/x-charts';
 import { Box, Button, ButtonGroup } from "@mui/material";
+import Tooltip from '@mui/material';
 
 
 interface DataItem {
@@ -120,11 +121,12 @@ export default function Login() {
               series={[
                 {
                   data: data.map(item => item.average_activityLevelSteps), 
-                  label: 'Average Activity Level Steps'
+                  label: 'Monthly Average Steps'
                 },
               ]}
               width={1000}
               height={400}
+              tooltip={{ trigger: 'item' }}
             />
           
           </div>
