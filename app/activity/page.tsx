@@ -7,16 +7,11 @@ import NavBar from "../navbar/page";
 import './activity.css';
 import { BarChart } from '@mui/x-charts';
 import { Box, Button, ButtonGroup } from "@mui/material";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import url from 'url'
-import querystring from 'querystring'
+
 
 interface DataItem {
   Id: number; // Adjust the type based on your actual data structure
-  Date: string
+  Month_Year: string;
   average_activityLevelSteps: number;
   // Add other properties as needed
 }
@@ -36,7 +31,7 @@ export default function Login() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDay' + dogNum);
+        const response = await axios.get<DataItem[]>('http://localhost:4000/MonthlyAverage' + dogNum);
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -90,12 +85,12 @@ export default function Login() {
   if (loading) return <p>Loading...</p>
 
   const chartData = data.map(item => ({
-    name: item.Date,
+    monthYear: item.Month_Year,
     value: item.average_activityLevelSteps
   }));
 
   const anotherChartData = anotherData.map(item => ({
-    name: item.Date,
+    name: item.Month_Year,
     value: item.average_activityLevelSteps
   }));
 
@@ -104,7 +99,7 @@ export default function Login() {
         <div>
           <NavBar/>
           </div>
-          <div> <h1> Activity Page </h1>
+          <div> <h1> Activity </h1>
             <div>
             <Box>
                 <ButtonGroup variant="contained">
@@ -117,12 +112,15 @@ export default function Login() {
             </Box>
             </div>
           <h2>Daily Average {anotherData.map(item => item.average_activityLevelSteps)} steps </h2>
+          <h3>This graph shows the average number of steps that your pet takes on each day in a month</h3>
+          
           <BarChart
               dataset={chartData}
-              xAxis={[{ scaleType: 'band', data: data.map(item => item.Date)}]}
+              xAxis={[{ scaleType: 'band', data: data.map(item => item.Month_Year)}]}
               series={[
                 {
                   data: data.map(item => item.average_activityLevelSteps), 
+                  label: 'Average Activity Level Steps'
                 },
               ]}
               width={1000}
