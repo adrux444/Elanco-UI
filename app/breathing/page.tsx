@@ -124,6 +124,7 @@ export default function Login() {
               ]}
               width={1000}
               height={400}
+              tooltip={{ trigger: 'item' }}
             />
           
           </div>

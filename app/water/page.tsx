@@ -113,10 +113,12 @@ console.log(dogNum)
               series={[
                 {
                   data: data.map(item => item.average_waterIntake),
+                  label: "Average Water Intake"
                 },
               ]}
               width={1000}
               height={400}
+              tooltip={{ trigger: 'item' }}
             />
           </div>
           <div>

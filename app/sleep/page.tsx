@@ -172,6 +172,7 @@ console.log(dogNum)
               series= {[{ data: seriesData }]}
               width={600}
               height={300}
+              tooltip={{ trigger: 'item' }}
             />
           <h4>
             Average Heart Rate while sleeping: {anotherData.map(item => item.avg_heart_rate)}
