@@ -9,7 +9,7 @@ import { Box, Button, ButtonGroup } from "@mui/material";
 
 interface DataItem {
     Id: number; // Adjust the type based on your actual data structure
-    Date: string
+    Month_Year: string;
     average_waterIntake: number;
     // Add other properties as needed
 }
@@ -31,7 +31,7 @@ console.log(dogNum)
       useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDay' + dogNum);
+            const response = await axios.get<DataItem[]>('http://localhost:4000/MonthlyAverage' + dogNum);
             setData(response.data);
             setLoading(false);
           } catch (error) {
@@ -80,11 +80,11 @@ console.log(dogNum)
     
       if (loading) return <p>Loading...</p>
       const chartData = data.map(item => ({
-        name: item.Date,
+        monthYear: item.Month_Year,
         value: item.average_waterIntake
       }));
       const anotherChartData = anotherData.map(item => ({
-        name: item.Date,
+        name: item.Month_Year,
         value: item.average_waterIntake
       }));
   return (
@@ -92,7 +92,7 @@ console.log(dogNum)
         <div>
           <NavBar/>
           </div>
-          <div> <h1> Water Page </h1>
+          <div> <h1> Water Intake </h1>
           <div>
             <Box>
                 <ButtonGroup variant="contained">
@@ -107,9 +107,9 @@ console.log(dogNum)
 
             <h2>Daily Average {anotherData.map(item => item.average_waterIntake)}ml </h2>
           
-          
+            <h3>This graph shows the average amount of water that your pet drinks on each day in a month</h3>
           <BarChart
-              xAxis={[{ scaleType: 'band', data: data.map(item => item.Date) }]}
+              xAxis={[{ scaleType: 'band', data: data.map(item => item.Month_Year) }]}
               series={[
                 {
                   data: data.map(item => item.average_waterIntake),

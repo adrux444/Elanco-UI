@@ -13,6 +13,7 @@ interface DataItem {
   AverageHoursSlept: number;
   AverageNormalHours:number;
   AverageEatingHours: number;
+  avg_heart_rate: number;
 }
 
 const currentUrl = window.location.href;
@@ -25,6 +26,15 @@ console.log(dogNum)
     const [data, setData] = useState<DataItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [anotherData, setAnotherData] = useState<DataItem[]>([]);
+    const [anotherLoading, setAnotherLoading] = useState(true);
+    const [anotherError, setAnotherError] = useState<string | null>(null);
+    const [another2Data, setAnother2Data] = useState<DataItem[]>([]);
+    const [another2Loading, setAnother2Loading] = useState(true);
+    const [another2Error, setAnother2Error] = useState<string | null>(null);
+    const [another3Data, setAnother3Data] = useState<DataItem[]>([]);
+    const [another3Loading, setAnother3Loading] = useState(true);
+    const [another3Error, setAnother3Error] = useState<string | null>(null);
   
     useEffect(() => {
       const fetchData = async () => {
@@ -42,6 +52,54 @@ console.log(dogNum)
       };
   
       fetchData();
+    }, []);
+
+    useEffect(() => {
+      const fetchAnotherData = async () => {
+        try {
+          const response = await axios.get<DataItem[]>('http://localhost:4000/HeartToSleep_' + dogNum);
+          setAnotherData(response.data);
+          setAnotherLoading(false);
+        } catch (error) {
+          console.error('Error fetching another data:', error);
+          setAnotherError('Error fetching another data');
+          setAnotherLoading(false);
+        }
+      };
+    
+      fetchAnotherData();
+    }, []);
+
+    useEffect(() => {
+      const fetchAnother2Data = async () => {
+        try {
+          const response = await axios.get<DataItem[]>('http://localhost:4000/HeartToWalk_' + dogNum);
+          setAnother2Data(response.data);
+          setAnother2Loading(false);
+        } catch (error) {
+          console.error('Error fetching another data:', error);
+          setAnother2Error('Error fetching another data');
+          setAnother2Loading(false);
+        }
+      };
+    
+      fetchAnother2Data();
+    }, []);
+
+    useEffect(() => {
+      const fetchAnother3Data = async () => {
+        try {
+          const response = await axios.get<DataItem[]>('http://localhost:4000/HeartToNormal_' + dogNum);
+          setAnother3Data(response.data);
+          setAnother3Loading(false);
+        } catch (error) {
+          console.error('Error fetching another data:', error);
+          setAnother3Error('Error fetching another data');
+          setAnother3Loading(false);
+        }
+      };
+    
+      fetchAnother3Data();
     }, []);
 
     const [dog, setDog] = useState<string>('');
@@ -81,7 +139,6 @@ console.log(dogNum)
     const totalNormalHours = data.reduce((total, item) => total + item.AverageNormalHours, 0);
     const totalEatingHours = data.reduce((total, item) => total + item.AverageEatingHours, 0);
     const totalWalkingHours = data.reduce((total, item) => total + item.AverageWalkingHours, 0);
-    console.log(totalSleepingHours)
     // Define series data
     const seriesData = [
       { id: 0, value: totalSleepingHours, label: 'Sleeping' },
@@ -96,7 +153,7 @@ console.log(dogNum)
         <div>
           <NavBar/>
           </div>
-          <div> <h1> Sleep Page </h1>
+          <div> <h1> Sleep </h1>
 
           <div>
             <Box>
@@ -109,14 +166,25 @@ console.log(dogNum)
                 </ButtonGroup>
             </Box>
             </div>
-          
+          <h3>This graph shows how your pet's days are distributed in hours</h3>
           <PieChart
               dataset={chartData}
               series= {[{ data: seriesData }]}
-              width={1000}
-              height={400}
+              width={600}
+              height={300}
             />
+          <h4>
+            Average Heart Rate while sleeping: {anotherData.map(item => item.avg_heart_rate)}
+          </h4><h4>
+            Average Heart Rate while walking: {another2Data.map(item => item.avg_heart_rate)}
+            </h4><h4>
+            Average Heart Rate while normal: {another3Data.map(item => item.avg_heart_rate)}
+          </h4>
+            
 
+          </div>
+          <div>
+          
           </div>
           <div>
             <Footer/>
