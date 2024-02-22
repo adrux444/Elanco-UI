@@ -1,4 +1,24 @@
-body{
+body {
     margin: 0;
     padding: 0;
+}
+
+.average {
+    color: white;
+    background-color: #2171b8;
+    text-align: center;
+    max-width: 300px;
+    margin: auto;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.inputs{
+    max-width: 25px;
+}
+
+.heartGraphContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
