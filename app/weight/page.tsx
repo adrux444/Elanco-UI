@@ -111,7 +111,7 @@ export default function Login() {
                 </ButtonGroup>
             </Box>
             </div>
-          <h2>Daily Average {anotherData.map(item => item.average_weight)} steps </h2>
+          <h2>Average {anotherData.map(item => item.average_weight)}kg </h2>
           <h3>This graph shows the average weight of your pet on each day in a month</h3>
           
           <LineChart
