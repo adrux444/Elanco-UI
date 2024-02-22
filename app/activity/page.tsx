@@ -48,7 +48,7 @@ export default function Login() {
   useEffect(() => {
     const fetchAnotherData = async () => {
       try {
-        const response = await axios.get<DataItem[]>('http://localhost:4000/average_' + dogNum);
+        const response = await axios.get<DataItem[]>('http://localhost:4000/MonthlyAverage' + dogNum);
         setAnotherData(response.data);
         setAnotherLoading(false);
       } catch (error) {
