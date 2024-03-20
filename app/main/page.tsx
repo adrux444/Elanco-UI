@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-
 import "./main.css";
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
@@ -14,6 +13,13 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import url from 'url'
 import querystring from 'querystring'
+import { BarChart, PieChart } from "@mui/x-charts";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from "dayjs";
+
+
 // interface Data {
 //   average_activityLevelSteps: number; // Adjust the type accordingly
 //   // Add other properties as needed
@@ -35,18 +41,21 @@ interface DataItem {
   AverageHoursSlept: number;
   AverageNormalHours:number;
   AverageEatingHours: number;
+
+  Month_Year: string;
+  totalWalkingHours: number;
+  totalHoursSlept: number;
 }
 
 const currentUrl = window.location.href;
 const urlObj = new URL(currentUrl);
 let dogNum = urlObj.searchParams.get('dog')
-console.log(dogNum)
+let date = urlObj.searchParams.get('date')
 
 
 export default function Main() {
 
   // const [data, setData] = useState([]);
-
 
   const [data, setData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,6 +63,15 @@ export default function Main() {
   const [anotherData, setAnotherData] = useState<DataItem[]>([]);
   const [anotherLoading, setAnotherLoading] = useState(true);
   const [anotherError, setAnotherError] = useState<string | null>(null);
+  const [another2Data, setAnother2Data] = useState<DataItem[]>([]);
+  const [another2Loading, setAnother2Loading] = useState(true);
+  const [another2Error, setAnother2Error] = useState<string | null>(null);
+  const [another3Data, setAnother3Data] = useState<DataItem[]>([]);
+  const [another3Loading, setAnother3Loading] = useState(true);
+  const [another3Error, setAnother3Error] = useState<string | null>(null);
+  const [dog, setDog] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null); // State to hold selected date
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,20 +105,39 @@ export default function Main() {
     fetchAnotherData();
   }, []);
 
-  // const [data, setData] = useState<Data | null>(null);
-
-  // async function getData() {
-  //   try {
-  //     const res = await fetch(`http://localhost:4000/average`);
-  //     const jsonData: Data = await res.json();
-  //     console.log("Received data:", jsonData);
-  //     setData(jsonData);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // }
+  useEffect(() => {
+    const fetchAnother2Data = async () => {
+      try {
+        const response = await axios.get<DataItem[]>('http://localhost:4000/MonthlyAverage' + dogNum);
+        setAnother2Data(response.data);
+        setAnother2Loading(false);
+      } catch (error) {
+        console.error('Error fetching another data:', error);
+        setAnother2Error('Error fetching another data');
+        setAnother2Loading(false);
+      }
+    };
   
-  const [dog, setDog] = useState<string>('');
+    fetchAnother2Data();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchAnother3Data = async () => {
+      try {
+        const response = await axios.get<DataItem[]>('http://localhost:4000/averageEachDay' + dogNum);
+        setAnother3Data(response.data);
+        setAnother3Loading(false);
+      } catch (error) {
+        console.error('Error fetching another data:', error);
+        setAnother3Error('Error fetching another data');
+        setAnother3Loading(false);
+      }
+    };
+  
+    fetchAnother3Data();
+  }, []);
+  
 
   const handleChange = (event: SelectChangeEvent) => {
     setDog(event.target.value);
@@ -121,24 +158,19 @@ export default function Main() {
 
   const dogOptions = ['canineone', 'caninetwo', 'caninethree'];
 
-  
-  
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  const handleDateChange = (date: Dayjs | null) => {
+    setSelectedDate(date); // Update selected date state
+  };
 
+  useEffect(() => {
+    if (selectedDate) {
+      const formattedDate = selectedDate.format('DD-MM-YYYY'); // Format date as required
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('date', formattedDate); // Set date parameter in URL
+      window.location.href = newUrl.toString(); // Replace current URL with updated one
+    }
+  }, [selectedDate]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get('http://localhost:4000/average');
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
 
   if (loading) return <p>Loading...</p>
 
@@ -159,12 +191,90 @@ export default function Main() {
 
   }));
 
+  const anotherChart2Data = another2Data.map(item => ({
+    monthYear: item.Month_Year,
+    mhr: item.average_value_heart_rate,
+    mtemp: item.average_temperature,
+    mwei: item.average_weight,
+    mbreath: item.average_breathing,
+    mcal: item.average_calorieBurn,
+    mstep: item.average_activityLevelSteps,
+    mfood: item.average_foodIntake,
+    mwater: item.average_waterIntake
+  }));
+
+  const anotherChart3Data = another3Data.map(item => ({
+    Date: item.Date,
+    dhr: item.average_value_heart_rate,
+    dtemp: item.average_temperature,
+    dwei: item.average_weight,
+    dbreath: item.average_breathing,
+    dcal: item.average_calorieBurn,
+    dstep: item.average_activityLevelSteps,
+    dfood: item.average_foodIntake,
+    dwater: item.average_waterIntake,
+    dwalk: item.totalWalkingHours,
+    dslept: item.totalHoursSlept
+  }));
+
+
+  const walkingHrs = anotherData.reduce((totalWalk, item) => totalWalk + item.AverageWalkingHours, 0);
+  const sleepingHrs = anotherData.reduce((totalSleep, item) => totalSleep + item.AverageHoursSlept, 0);
+  const walkingToday: number = another3Data
+  .filter(item => item.Date === date)
+  .map(item => item.totalWalkingHours)[0] || 0;
+  const sleepingToday: number = another3Data
+  .filter(item => item.Date === date)
+  .map(item => item.totalHoursSlept)[0] || 0;
+
+  const walkingSeriesData = [
+    { id: 0, value: (walkingToday-walkingHrs), color: '#2F7509'},
+    { id: 1, value: walkingToday, color: '#49B80D'},
+    { id: 2, value: (walkingHrs-walkingToday), color: '#ADADAD'},
+  ];
+
+  const sleepingSeriesData = [
+    { id: 0, value: (sleepingToday-sleepingHrs), color: '#090975'},
+    { id: 1, value: sleepingToday, color: '#1313C2'},
+    { id: 2, value: (sleepingHrs-sleepingToday), color: '#ADADAD'},
+  ];
+
+  console.log(sleepingToday);
+
+    const getSleepReviewMessage = (): string => {
+      if (sleepingToday <= 0.9 * sleepingHrs) {
+        return 'Your pet\'s sleeping activity is below average today.';
+        
+      } else if (sleepingToday - sleepingHrs > 0.1 * sleepingHrs) {
+        return 'Your pet\'s sleeping activity is above average today.';
+        
+      } else {
+        return 'Your pet\'s sleeping activity is within the normal range today.';
+        
+      }
+    };
+
+    const getWalkReviewMessage = (): string => {
+      if (walkingToday <= 0.9 * walkingHrs) {
+        return 'Your pet\'s walking activity is below average today.';
+        
+      } else if (walkingToday - walkingHrs > 0.1 * walkingHrs) {
+        return 'Your pet\'s walking activity is above average today.';
+        
+      } else {
+        return 'Your pet\'s walking activity is within the normal range today.';
+        
+      }
+    };
+
+    
   return (
     <main>
         <div>
           <NavBar/>
           <div className="title">
             <h1>Welcome </h1>
+          
             <div>
             <Box>
                 <ButtonGroup variant="contained">
@@ -174,9 +284,22 @@ export default function Main() {
                     </Button>
                   ))}
                 </ButtonGroup>
+                <br/>
+                <br/>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker label="Select a date to view data"
+                    format = "DD-MM-YYYY"
+                    minDate= {dayjs("2021-1-1")}
+                    maxDate= {dayjs("2023-12-31")}
+                    onChange={handleDateChange}
+                    defaultValue={dayjs(date)}
+                  />
+                </LocalizationProvider>
+            
             </Box>
             </div>
             <h1><div style={{fontWeight: 'lighter'}}>Your pet's health at a glance</div></h1>
+            
             </div>
           <div className="cards">
             <div className="card">
@@ -184,6 +307,7 @@ export default function Main() {
               <Link href={'/activity?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_activityLevelSteps)} steps a day</p>
+              
             </div>
             <div className="card">
               Calories 
@@ -196,6 +320,28 @@ export default function Main() {
               <Link href={'/sleep?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {anotherData.map(item => item.AverageHoursSlept)} hours a day</p>
+              <p>{getWalkReviewMessage()}</p>
+              <p>{getSleepReviewMessage()}</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}>
+                {another3Data.length > 0 && (
+                  <PieChart
+                    dataset={chartData}
+                    series= {[{ data: walkingSeriesData, innerRadius: 40}]}
+                    width={300}
+                    height={120}
+                    tooltip={{ trigger: 'item' }}
+                  />
+                )}
+                {another3Data.length > 0 && (
+                  <PieChart
+                    dataset={chartData}
+                    series= {[{ data: sleepingSeriesData, innerRadius: 40}]}
+                    width={300}
+                    height={120}
+                    tooltip={{ trigger: 'item' }}
+                  />
+                )}
+              </div>
             </div>
             <div className="card">
               Water Intake 
