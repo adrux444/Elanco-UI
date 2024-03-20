@@ -6,7 +6,7 @@ import "./main.css";
 import NavBar from "../navbar/page";
 import Footer from "../footer/page";
 import Link from "next/link";
-import { Box, Button, ButtonGroup } from "@mui/material";
+import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -18,6 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from "dayjs";
+import { monitorEventLoopDelay } from "perf_hooks";
 
 
 // interface Data {
@@ -148,6 +149,10 @@ export default function Main() {
       var url = require('url');
       const adr = new URL('http://localhost:3000/main');
       adr.searchParams.append('dog', dog);
+      if (date !== null) {
+        adr.searchParams.append('date', date);
+    }
+
       window.location.href = adr.toString();
     }
   }, [dog]);
@@ -226,6 +231,21 @@ export default function Main() {
   const sleepingToday: number = another3Data
   .filter(item => item.Date === date)
   .map(item => item.totalHoursSlept)[0] || 0;
+  const activityToday: number = another3Data
+  .filter(item => item.Date === date)
+  .map(item => item.average_activityLevelSteps)[0] || 0;
+
+  const sevenDaysAgo = dayjs(date, "DD-MM-YYYY").subtract(6, 'day');
+
+  const pastSevenDaysActivityLevels = data
+    .filter(item => {
+      const itemDate = dayjs(item.Date);
+      return itemDate.isAfter(sevenDaysAgo, 'day') && itemDate.isBefore(dayjs(date, "DD-MM-YYYY"), 'day');
+    })
+    .map(item => ({
+     date: item.Date,
+     value: item.average_activityLevelSteps
+    }));
 
   const walkingSeriesData = [
     { id: 0, value: (walkingToday-walkingHrs), color: '#2F7509'},
@@ -267,6 +287,16 @@ export default function Main() {
       }
     };
 
+    if (date != null) {
+      const day = date.substring(0, 2);
+      const month = date.substring(3, 5); 
+      const year = date.substring(6, 10);
+      console.log(day);
+      console.log(month);
+      console.log(year);
+    } else {
+      console.log("Date is null or undefined");
+    }
     
   return (
     <main>
@@ -292,7 +322,7 @@ export default function Main() {
                     minDate= {dayjs("2021-1-1")}
                     maxDate= {dayjs("2023-12-31")}
                     onChange={handleDateChange}
-                    defaultValue={dayjs(date)}
+                    defaultValue={dayjs(date, "DD-MM-YYYY")}
                   />
                 </LocalizationProvider>
             
@@ -303,79 +333,117 @@ export default function Main() {
             </div>
           <div className="cards">
             <div className="card">
+            <div className="card-content">
               Activity Level 
               <Link href={'/activity?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_activityLevelSteps)} steps a day</p>
-              
+              {another3Data.length > 0 && (
+              <BarChart
+              dataset={pastSevenDaysActivityLevels}
+              xAxis={[{ scaleType: 'band', data: data.map(item => item.Month_Year)}]}
+              series={[
+                {
+                  data: data.map(item => item.average_activityLevelSteps), 
+                  label: 'Monthly Average Steps'
+                },
+              ]}
+              width={300}
+              height={300}
+              tooltip={{ trigger: 'item' }}
+              />
+              )}
+            </div>
             </div>
             <div className="card">
+            <div className="card-content">
               Calories 
               <Link href={'/calories?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_calorieBurn)} calories burned a day</p>
             </div>
+            </div>
             <div className="card">
+            <div className="card-content">
               Sleep 
               <Link href={'/sleep?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {anotherData.map(item => item.AverageHoursSlept)} hours a day</p>
               <p>{getWalkReviewMessage()}</p>
               <p>{getSleepReviewMessage()}</p>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 {another3Data.length > 0 && (
-                  <PieChart
-                    dataset={chartData}
-                    series= {[{ data: walkingSeriesData, innerRadius: 40}]}
-                    width={300}
-                    height={120}
-                    tooltip={{ trigger: 'item' }}
-                  />
-                )}
-                {another3Data.length > 0 && (
-                  <PieChart
-                    dataset={chartData}
-                    series= {[{ data: sleepingSeriesData, innerRadius: 40}]}
-                    width={300}
-                    height={120}
-                    tooltip={{ trigger: 'item' }}
-                  />
-                )}
+                    <Box flexGrow={1} style={{ marginRight: '10px' }}>
+                      <Typography>Walking</Typography>
+                      <PieChart
+                        dataset={chartData}
+                        series={[{ data: walkingSeriesData, innerRadius: 40 }]}
+                        width={150}
+                        height={120}
+                        tooltip={{ trigger: 'item' }}
+                        />
+                    </Box>
+                  )}
+                  {another3Data.length > 0 && (
+                    <Box flexGrow={1} style={{ marginLeft: '10px' }}>
+                      <Typography>Sleeping</Typography>
+                      <PieChart
+                        dataset={chartData}
+                        series={[{ data: sleepingSeriesData, innerRadius: 40 }]}
+                        width={150}
+                        height={120}
+                        tooltip={{ trigger: 'item' }}
+                        />
+                    </Box>
+                  )}
+                </div>
               </div>
             </div>
             <div className="card">
+              <div className="card-content">
               Water Intake 
               <Link href={'/water?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_waterIntake)} ml a day</p>
             </div>
+            </div>
             <div className="card">
+            <div className="card-content">
               Heart Rate 
               <Link href={'/heart?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_value_heart_rate)} beats per minute</p>
             </div>
+            </div>
             <div className="card">
+            <div className="card-content">
               Breathing Rate 
               <Link href={'/breathing?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_breathing)} breaths per minute</p>
             </div>
+            </div>
             <div className="card">
+            <div className="card-content">
               Temperature 
               <Link href={'/temperature?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_temperature)}°c</p>
             </div>
+            </div>
             <div className="card">
+            <div className="card-content">
               Weight 
               <Link href={'/weight?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
               <p>Average {data.map(item => item.average_weight)}kg</p>
             </div>
+            </div>
             <div className="card">
+            <div className="card-content">
               Extra card 
               <Link href={'/activity?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
+            </div>
             </div>
           </div>
           <br />
