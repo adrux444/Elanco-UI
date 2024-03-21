@@ -24,6 +24,12 @@ import dayjs, { Dayjs } from "dayjs";
 //   average_activityLevelSteps: number; // Adjust the type accordingly
 //   // Add other properties as needed
 // }
+interface TempData {
+  Date: string;
+  Hour: number;
+  HighestTemperature: number;
+  AverageTemperature: number;
+ }
 interface DataItem {
   Id: number; // Adjust the type based on your actual data structure
   Date: string
@@ -73,8 +79,22 @@ export default function Main() {
   const [dog, setDog] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null); // State to hold selected date
 
+  const [tempData, setTempData] = useState<TempData[]>([]);
 
   useEffect(() => {
+    const fetchTempData = async () => {
+      const response = await fetch('http://localhost:4000/currentTempCanineOne');
+      const newData: TempData[] = await response.json();
+      setTempData(newData);
+    };
+
+    fetchTempData();
+ }, []);
+
+
+  useEffect(() => {
+
+
     const fetchData = async () => {
       try {
         const response1 = await axios.get<DataItem[]>('http://localhost:4000/average_'+dogNum);
@@ -409,6 +429,21 @@ const weekData = filteredData.map(item => ({
               <br/>
             <div className="card-content">
               <p>Average {data.map(item => item.average_temperature)}°c</p>
+
+              {tempData.length > 0 ? (
+        tempData.map((item, index) => (
+          <div key={index}>
+            {/* <p>Date: {item.Date}</p> */}
+            {/* <p>Hour: {item.Hour}</p> */}
+            {/* <p>Highest Temperature: {item.HighestTemperature}°C</p> */}
+            <p>Today your dogs average temperature is {item.AverageTemperature}°C and its highest was {item.HighestTemperature}°C at {item.Hour}:00</p>
+            {/* <p>this is an exceptionally high temperature and can mean that your dog could end up getting a fever</p> */}
+          </div>
+        ))
+      ) : (
+        <p>Loading...</p>
+      )}
+
             </div>
             </div>
             <div className="card">
