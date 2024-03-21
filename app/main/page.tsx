@@ -13,7 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import { SelectChangeEvent } from '@mui/material/Select';
 import url from 'url'
 import querystring from 'querystring'
-import { BarChart, PieChart } from "@mui/x-charts";
+import { BarChart, LineChart, PieChart } from "@mui/x-charts";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -52,6 +52,9 @@ interface DataItem {
   totalWalkingHours: number;
   totalHoursSlept: number;
   totalSteps: number;
+  totalIn: number;
+  totalOut: number;
+  totalwaterIntake: number;
 }
 
 const currentUrl = window.location.href;
@@ -221,7 +224,10 @@ export default function Main() {
     dwater: item.average_waterIntake,
     dwalk: item.totalWalkingHours,
     dslept: item.totalHoursSlept,
-    tsteps: item.totalSteps
+    tsteps: item.totalSteps,
+    tin: item.totalIn,
+    tout: item.totalOut
+
   }));
 
 
@@ -241,14 +247,14 @@ export default function Main() {
   const tomorrow = dayjs(date, "DD-MM-YYYY").add(1, 'day');
 
   const walkingSeriesData = [
-    { id: 0, value: (walkingToday-walkingHrs), color: '#2F7509'},
-    { id: 1, value: walkingToday, color: '#49B80D'},
+    { id: 0, value: (walkingToday-walkingHrs), color: '#5E8E23'},
+    { id: 1, value: walkingToday, color: '#8ED834'},
     { id: 2, value: (walkingHrs-walkingToday), color: '#ADADAD'},
   ];
 
   const sleepingSeriesData = [
-    { id: 0, value: (sleepingToday-sleepingHrs), color: '#090975'},
-    { id: 1, value: sleepingToday, color: '#1313C2'},
+    { id: 0, value: (sleepingToday-sleepingHrs), color: '#1E227D'},
+    { id: 1, value: sleepingToday, color: '#343CD8'},
     { id: 2, value: (sleepingHrs-sleepingToday), color: '#ADADAD'},
   ];
   
@@ -286,7 +292,14 @@ export default function Main() {
 
 const weekData = filteredData.map(item => ({
   Date: item.Date,
-  Steps: item.totalSteps
+  Water: item.totalwaterIntake,
+  Steps: item.totalSteps,
+  calIn: item.totalIn,
+  calOut: item.totalOut,
+  Heart: item.average_value_heart_rate,
+  Temperature: item.average_temperature,
+  Weight: item.average_weight,
+  Breathing: item.average_breathing,
 }));
 
     
@@ -337,10 +350,11 @@ const weekData = filteredData.map(item => ({
                 <Typography>Steps This Week</Typography>
                 <BarChart
                 dataset={weekData}
-                xAxis={[{ scaleType: 'band', dataKey: 'Date'}]}
+                xAxis={[{ scaleType: 'band', dataKey: 'Date' }]}
                 series={[{
                   dataKey: 'Steps', 
-                  label: 'Steps'
+                  label: 'Steps',
+                  color: '#343CD8'
                 }]}
                 width={300}
                 height={300}
@@ -357,6 +371,22 @@ const weekData = filteredData.map(item => ({
               <br/>
               <div className="card-content">
               <p>Average {data.map(item => item.average_calorieBurn)} calories burned a day</p>
+              {another3Data.length > 0 && (
+                <Box flexGrow={1} style={{ marginRight: '10px' }}>
+                <Typography>Calories This Week</Typography>
+                <BarChart
+                dataset={weekData}
+                xAxis={[{ scaleType: 'band', dataKey: 'Date'}]}
+                series={[
+                  { dataKey: 'calIn', label: 'Kcal Eaten', color: '#D87E34'},
+                  { dataKey: 'calOut', label: 'Kcal Burned', color: '#D8348E'},
+                ]}
+                width={300}
+                height={300}
+                tooltip={{ trigger: 'item' }}
+                />
+                </Box>
+              )}
             </div>
             </div>
             <div className="card">
@@ -365,13 +395,19 @@ const weekData = filteredData.map(item => ({
               <br/>
               <div className="card-content">
               <p>Average {anotherData.map(item => item.AverageHoursSlept)} hours a day</p>
-              <p>{getWalkReviewMessage()}</p>
-              <p>{getSleepReviewMessage()}</p>
+              <Typography>{getWalkReviewMessage()}
+              <br/>
+              <br/>
+              {getSleepReviewMessage()}
+              <br/>
+              <br/>
+              Todays activity compared to average</Typography>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
     {another3Data.length > 0 && (
       <div style={{ display: 'flex', alignItems: 'center', marginLeft: '40px' }}>
+        
         <div style={{marginLeft: '55px'}}>
-          <Typography style={{marginLeft:'-100px'}}>Walking</Typography>
+          <Typography style={{marginLeft:'-100px', fontWeight: 'bold'}}>Walking</Typography>
           <PieChart
             dataset={chartData}
             series={[{ data: walkingSeriesData, innerRadius: 20 }]}
@@ -385,7 +421,7 @@ const weekData = filteredData.map(item => ({
     {another3Data.length > 0 && (
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div>
-          <Typography style={{marginLeft:'-100px'}}>Sleeping</Typography>
+          <Typography style={{marginLeft:'-100px' , fontWeight: 'bold'}}>Sleeping</Typography>
           <PieChart
             dataset={chartData}
             series={[{ data: sleepingSeriesData, innerRadius: 20 }]}
@@ -405,6 +441,23 @@ const weekData = filteredData.map(item => ({
               <br/>
               <div className="card-content">
               <p>Average {data.map(item => item.average_waterIntake)} ml a day</p>
+              {another3Data.length > 0 && (
+                <Box flexGrow={1} style={{ marginRight: '10px' }}>
+                <Typography>Water Intake This Week</Typography>
+                <BarChart
+                dataset={weekData}
+                xAxis={[{ scaleType: 'band', dataKey: 'Date' }]}
+                series={[{
+                  dataKey: 'Water', 
+                  label: 'Water',
+                  color: '#343CD8'
+                }]}
+                width={300}
+                height={300}
+                tooltip={{ trigger: 'item' }}
+                />
+                </Box>
+              )}
             </div>
             </div>
             <div className="card">
@@ -413,6 +466,23 @@ const weekData = filteredData.map(item => ({
               <br/>
             <div className="card-content">
               <p>Average {data.map(item => item.average_value_heart_rate)} beats per minute</p>
+              {another3Data.length > 0 && (
+                <Box flexGrow={1} style={{ marginRight: '10px' }}>
+                <Typography>Average Heart Rate This Week</Typography>
+                <LineChart
+                dataset={weekData}
+                xAxis={[{ scaleType: 'band', dataKey: 'Date' }]}
+                series={[{
+                  dataKey: 'Heart', 
+                  label: 'Heart Rate',
+                  color: '#B01C13'
+                }]}
+                width={300}
+                height={300}
+                tooltip={{ trigger: 'item' }}
+                />
+                </Box>
+              )}
             </div>
             </div>
             <div className="card">
@@ -421,6 +491,23 @@ const weekData = filteredData.map(item => ({
               <br/>
             <div className="card-content">
               <p>Average {data.map(item => item.average_breathing)} breaths per minute</p>
+              {another3Data.length > 0 && (
+                <Box flexGrow={1} style={{ marginRight: '10px' }}>
+                <Typography>Average Breathing Rate This Week</Typography>
+                <LineChart
+                dataset={weekData}
+                xAxis={[{ scaleType: 'band', dataKey: 'Date' }]}
+                series={[{
+                  dataKey: 'Breathing', 
+                  label: 'Breathing Rate',
+                  color: '#343CD8'
+                }]}
+                width={300}
+                height={300}
+                tooltip={{ trigger: 'item' }}
+                />
+                </Box>
+              )}
             </div>
             </div>
             <div className="card">
@@ -429,20 +516,38 @@ const weekData = filteredData.map(item => ({
               <br/>
             <div className="card-content">
               <p>Average {data.map(item => item.average_temperature)}°c</p>
-
               {tempData.length > 0 ? (
         tempData.map((item, index) => (
           <div key={index}>
             {/* <p>Date: {item.Date}</p> */}
             {/* <p>Hour: {item.Hour}</p> */}
             {/* <p>Highest Temperature: {item.HighestTemperature}°C</p> */}
-            <p>Today your dogs average temperature is {item.AverageTemperature}°C and its highest was {item.HighestTemperature}°C at {item.Hour}:00</p>
+            <Typography>Today your dogs average temperature is {item.AverageTemperature}°C and its highest was {item.HighestTemperature}°C at {item.Hour}:00</Typography>
             {/* <p>this is an exceptionally high temperature and can mean that your dog could end up getting a fever</p> */}
           </div>
         ))
       ) : (
         <p>Loading...</p>
       )}
+              {another3Data.length > 0 && (
+                <Box flexGrow={1} style={{ marginRight: '10px' }}>
+                <Typography>Average Temperature This Week</Typography>
+                <LineChart
+                dataset={weekData}
+                xAxis={[{ scaleType: 'band', dataKey: 'Date' }]}
+                series={[{
+                  dataKey: 'Temperature', 
+                  label: 'Temperature',
+                  color: '#B01C13'
+                }]}
+                width={300}
+                height={200}
+                tooltip={{ trigger: 'item' }}
+                />
+                </Box>
+              )}
+
+              
 
             </div>
             </div>
@@ -452,6 +557,26 @@ const weekData = filteredData.map(item => ({
               <br/>
             <div className="card-content">
               <p>Average {data.map(item => item.average_weight)}kg</p>
+              {another3Data.length > 0 && (
+                <Box flexGrow={1} style={{ marginRight: '10px' }}>
+                <Typography>Average Weight This Week</Typography>
+                <LineChart
+                dataset={weekData}
+                xAxis={[{ scaleType: 'band', dataKey: 'Date' }]}
+                series={[{
+                  dataKey: 'Weight', 
+                  label: 'Weight',
+                  color: '#D87E34'
+                }]}
+                width={300}
+                height={300}
+                tooltip={{ trigger: 'item' }}
+                />
+                </Box>
+              )}
+
+
+              
             </div>
             </div>
             <div className="card">
