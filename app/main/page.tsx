@@ -7,12 +7,7 @@ import NavBar from "../navbar/page";
 import Footer from "../footer/page";
 import Link from "next/link";
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import { SelectChangeEvent } from '@mui/material/Select';
-import url from 'url'
-import querystring from 'querystring'
 import { BarChart, LineChart, PieChart } from "@mui/x-charts";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -20,10 +15,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from "dayjs";
 
 
-// interface Data {
-//   average_activityLevelSteps: number; // Adjust the type accordingly
-//   // Add other properties as needed
-// }
 interface TempData {
   Date: string;
   Hour: number;
@@ -65,8 +56,6 @@ let date = urlObj.searchParams.get('date')
 
 export default function Main() {
 
-  // const [data, setData] = useState([]);
-
   const [data, setData] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -85,56 +74,37 @@ export default function Main() {
   const [tempData, setTempData] = useState<TempData[]>([]);
 
   useEffect(() => {
-    const fetchTempData = async () => {
-      const response = await fetch('http://localhost:4000/currentTempCanineOne');
-      const newData: TempData[] = await response.json();
-      setTempData(newData);
-    };
-
-    fetchTempData();
- }, []);
-
-
-  useEffect(() => {
-
-
     const fetchData = async () => {
       try {
-        const response1 = await axios.get<DataItem[]>('http://localhost:4000/average_'+dogNum);
+        // Fetch temperature data
+        const tempResponse = await fetch('http://localhost:4000/currentTempCanineOne');
+        const tempData: TempData[] = await tempResponse.json();
+        setTempData(tempData);
+        
+        // Fetch other data
+        const response1 = await axios.get<DataItem[]>('http://localhost:4000/average_' + dogNum);
         setData(response1.data);
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Error fetching data');
-        setLoading(false);
-      }
-  
-      try {
+    
         const response2 = await axios.get<DataItem[]>('http://localhost:4000/BehaviourPatternActionsAverage' + dogNum);
         setAnotherData(response2.data);
         setAnotherLoading(false);
-      } catch (error) {
-        console.error('Error fetching another data:', error);
-        setAnotherError('Error fetching another data');
-        setAnotherLoading(false);
-      }
-  
-      try {
+    
         const response3 = await axios.get<DataItem[]>('http://localhost:4000/MonthlyAverage' + dogNum);
         setAnother2Data(response3.data);
         setAnother2Loading(false);
-      } catch (error) {
-        console.error('Error fetching another data:', error);
-        setAnother2Error('Error fetching another data');
-        setAnother2Loading(false);
-      }
-  
-      try {
+    
         const response4 = await axios.get<DataItem[]>('http://localhost:4000/averageEachDay' + dogNum);
         setAnother3Data(response4.data);
         setAnother3Loading(false);
       } catch (error) {
-        console.error('Error fetching another data:', error);
+        console.error('Error fetching data:', error);
+        setError('Error fetching data');
+        setLoading(false);
+        setAnotherError('Error fetching another data');
+        setAnotherLoading(false);
+        setAnother2Error('Error fetching another data');
+        setAnother2Loading(false);
         setAnother3Error('Error fetching another data');
         setAnother3Loading(false);
       }
@@ -142,6 +112,7 @@ export default function Main() {
   
     fetchData();
   }, []);
+  
   
   
 
