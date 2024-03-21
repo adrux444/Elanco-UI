@@ -29,10 +29,13 @@ body{
 }
 
   
-  .card-content {
-    height: 100%; 
-    overflow: hidden; 
-  }
+.card-content {
+  display: flex; /* Add display flex */
+  flex-direction: column; /* Align children vertically */
+  align-items: center; /* Center children horizontally */
+  height: 100%; 
+  overflow: hidden; 
+}
 
 
 .cards {
