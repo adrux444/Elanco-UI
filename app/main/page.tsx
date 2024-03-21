@@ -428,7 +428,8 @@ export default function Main() {
               Temperature 
               <Link href={'/temperature?dog='+dogNum}><div className="viewmore">View more {">"}</div></Link>
               <br/>
-              <p>Average {data.map(item => item.average_temperature)}°c</p>
+              <p>Average (general) {data.map(item => item.average_temperature)}°c</p>
+              <p>today your dogs average temperatire is °c and the hisghest temp it was today is °c </p>
             </div>
             </div>
             <div className="card">
